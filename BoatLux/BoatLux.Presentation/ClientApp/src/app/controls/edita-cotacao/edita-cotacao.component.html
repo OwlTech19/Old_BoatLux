@@ -1,0 +1,102 @@
+<form [formGroup]="filtrosFormGroup" autocomplete="off" (submit)="buscarDados()">
+    <h1 mat-dialog-title>
+        {{titulo}}
+        <button type="button" mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+    </h1>
+    <mat-dialog-content>
+        <mat-card class="search-filter-card">
+            <mat-card-content>
+                <controles-busca-rapida #produto tipo="produto"></controles-busca-rapida>
+            </mat-card-content>
+            <mat-card-actions>
+                <button type="button" mat-raised-button color="accent" class="orange-bg" (click)="limparBusca()">
+                    <mat-icon>clear</mat-icon>
+                    Limpar
+                </button>
+                <button type="submit" mat-raised-button color="accent" class="blue-bg">
+                    <mat-icon>search</mat-icon>
+                    Buscar
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+        <controles-legenda [hidden]="!temItens" #legenda></controles-legenda>
+        <div>
+            <table mat-table class="table table-medium table-striped table-hover table-pointer" [dataSource]="itensDataSource" matSort 
+                  matSortActive="prodId" matSortDisableClear matSortDirection="desc" multiTemplateDataRows>
+                <ng-container matColumnDef="prodId">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                    <td mat-cell *matCellDef="let item">{{item.prodId}}</td>
+                </ng-container>
+                <ng-container matColumnDef="barra">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Barra</th>
+                    <td mat-cell *matCellDef="let item">{{item.barra}}</td>
+                </ng-container>
+                <ng-container matColumnDef="descricao">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+                    <td mat-cell *matCellDef="let item">{{item.descricao}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="tabelaFilho">
+                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="colunasProdutos.length">Ações</th>
+                    <td mat-cell *matCellDef="let item;" [attr.colspan]="colunasProdutos.length">
+                        <div class="nestedMatTableWrapper">
+                            <table class="table table-small table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let coluna of colunasProdutosFornecedor" [hidden]="!coluna.visivel">{{coluna.nome}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let subItem of item.fornecedores; let i= index" [ngClass]="{'green-50-bg': subItem.alterado }">
+                                        <td [hidden]="!colunasProdutosFornecedor[0].visivel" align="center">{{i+1}} °</td>
+                                        <td [hidden]="!colunasProdutosFornecedor[1].visivel">{{subItem.fornecedorId}}</td>
+                                        <td [hidden]="!colunasProdutosFornecedor[2].visivel">{{subItem.razaoSocial}}</td>
+                                        <td [hidden]="!colunasProdutosFornecedor[3].visivel" align="center">{{subItem.prazoEntrega}}</td>
+                                        <td [hidden]="!colunasProdutosFornecedor[4].visivel">{{subItem.precoCusto}}</td>
+                                        <td [hidden]="!colunasProdutosFornecedor[5].visivel">
+                                            <input matInput maxlength="10" currencyMask [options]="{ prefix: '', thousands: '.', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 0, inputMode: 1 }" placeholder="" [(ngModel)]="subItem.qtdComprar" (ngModelChange)="item.alterado = true; subItem.alterado = true;" [ngModelOptions]="{standalone: true}" style="color: blue; font-weight: bold;">
+                                        </td>
+                                        <td [hidden]="!colunasProdutosFornecedor[6].visivel">
+                                            <input matInput maxlength="10" currencyMask [options]="{ prefix: '', thousands: '.', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 0, inputMode: 1 }" placeholder="" [(ngModel)]="subItem.qtdEmbal" (ngModelChange)="item.alterado = true; subItem.alterado = true; subItem.precoEmbal = (subItem.precoUnit * subItem.qtdEmbal);" [ngModelOptions]="{standalone: true}" style="color: blue; font-weight: bold;">
+                                        </td>
+                                        <td [hidden]="!colunasProdutosFornecedor[7].visivel">{{calcularQtdTotalComprar(subItem.qtdComprar, subItem.qtdEmbal)}}</td>
+                                        <td [hidden]="!colunasProdutosFornecedor[8].visivel">
+                                            <input matInput maxlength="17" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 4, inputMode: 1 }" placeholder="" [(ngModel)]="subItem.precoUnit" (ngModelChange)="item.alterado = true; subItem.alterado = true; subItem.precoEmbal = (subItem.precoUnit * subItem.qtdEmbal);" [ngModelOptions]="{standalone: true}" style="color: blue; font-weight: bold;">
+                                        </td>
+                                        <td [hidden]="!colunasProdutosFornecedor[9].visivel">
+                                            <input matInput maxlength="15" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }" placeholder="" [(ngModel)]="subItem.precoEmbal" (ngModelChange)="item.alterado = true; subItem.alterado = true; subItem.precoUnit = calcularPrecoUnitario(subItem.precoEmbal, subItem.qtdEmbal);" [ngModelOptions]="{standalone: true}" style="color: blue; font-weight: bold;">
+                                        </td>
+                                        <td [hidden]="!colunasProdutosFornecedor[10].visivel">{{calcularValorTotalComprar(subItem.precoUnit, subItem.qtdComprar, subItem.qtdEmbal)}}</td>
+                                        <td [hidden]="!colunasProdutosFornecedor[11].visivel">{{CalcularVariacao(subItem.precoUnit, subItem.precoCusto)}}</td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row style="white-space: nowrap;" *matHeaderRowDef="colunasProdutos;"></tr>
+                <tr mat-row style="white-space: nowrap;" *matRowDef="let row; columns: colunasProdutos" [ngClass]="{'green-50-bg': row.alterado }" (click)="expandirProduto(row)"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['tabelaFilho']" [hidden]="row.prodId != tempIdProdutoExpandido" style="background-color: #f8f8f8 !important; cursor: default !important;"></tr>
+
+
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[10, 50]" showFirstLastButtons></mat-paginator>
+        </div>
+        <br />
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button type="button" mat-raised-button color="accent" class="grey-bg mr-8" (click)="fecharEdicao()">
+            <mat-icon>close</mat-icon>
+            <span>Fechar</span>
+        </button>
+        <button type="button" mat-raised-button color="accent" class="green-bg" (click)="concluirEdicao()">
+            <mat-icon>check</mat-icon>
+            <span>Concluir edição</span>
+        </button>
+    </mat-dialog-actions>
+</form>

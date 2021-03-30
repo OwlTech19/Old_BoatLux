@@ -1,0 +1,80 @@
+<div class="pagina-padrao">
+    <form [formGroup]="filtrosFormGroup" autocomplete="off">
+        <div class="page-layout simple fullwidth">
+
+            <!-- HEADER -->
+            <titulo-pagina #tituloPagina titulo="Módulo Financeiro" subTitulo="Fluxo de Caixa"></titulo-pagina>
+            <!-- / HEADER -->
+            <!-- CONTENT -->
+            <div class="content p-20">
+                <mat-card class="mat-elevation-z3">
+                    <mat-card-content>
+                        <mat-card class="search-filter-card">
+                            <mat-card-content>
+                                <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                    <controles-combo-loja #comboloja (aoSelecionarLoja)="aoSelecionarLoja()" multiLoja="true" fxFlex></controles-combo-loja>
+                                </div>
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                    <mat-form-field fxFlex="50%" class="pl-4">
+                                        <mat-select placeholder="Filtrar data" formControlName="tipoData">
+                                            <mat-option value="1">Data de vencimento</mat-option>
+                                            <mat-option value="2">Data de pagamento / recebimento</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-form-field fxFlex="50%">
+                                        <input matInput ngxDaterangepickerMd
+                                               placeholder="Período"
+                                               formControlName="periodo"
+                                               [autoApply]="false"
+                                               [alwaysShowCalendars]="true"
+                                               [ranges]="ranges"
+                                               type="text"
+                                               readonly>
+                                    </mat-form-field>
+                                </div>
+                                <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                                    <controles-busca-rapida #conta tipo="conta" fxFlex="50%" fxFlex.gt-sm="100%" (change)="verificaSaldoInicial()" (dblclick)="verificaSaldoInicial()" (click)="verificaSaldoInicial()"></controles-busca-rapida>
+                                        <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%" [style.opacity]="opacity">
+                                            <mat-label>Saldo inicial</mat-label>
+                                            <input matInput formControlName="saldoInicial"
+                                                   currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: true, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                                                   placeholder="Saldo inicial. Exemplo: 200,00."
+                                                   readonly="{{desabilitaSaldo}}" />
+                                        </mat-form-field>
+                                </div>
+                                <div fxLayout="column">
+                                    <mat-form-field fxFlex>
+                                        <mat-select placeholder="Tipo de dados" formControlName="tipoDados">
+                                            <mat-option value="1">Analítico</mat-option>
+                                            <mat-option value="2">Sintético</mat-option>
+                                            <mat-option value="3">Resumido</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-checkbox class="example-margin" formControlName="incluirVencidos" [hidden]="ocultaIncVencidos()" >Incluir títulos vencidos</mat-checkbox>
+                                    <mat-checkbox class="example-margin" formControlName="incluirObservacao" [hidden]="ocultaObservacao()" >Incluir observação</mat-checkbox>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </mat-card-content>
+                    <mat-card-actions fxLayoutAlign="center center">
+                        <button mat-raised-button type="button" color="accent" class="orange-bg" (click)="definirDadosPadrao()">
+                            <mat-icon>clear</mat-icon>
+                            <span fxShow.xs="false">Limpar</span>
+                        </button>
+                        <button mat-raised-button type="button" color="accent" class="cyan-bg" [matMenuTriggerFor]="menuImpressao">
+                            <mat-icon>print</mat-icon>
+                            <span fxShow.xs="false">Imprimir</span>
+                        </button>
+                        <mat-menu #menuImpressao="matMenu">
+                            <button mat-menu-item (click)="imprimir(1, true)">Visualizar</button>
+                            <button mat-menu-item (click)="imprimir(1, false)">Exportar PDF</button>
+                            <button mat-menu-item (click)="imprimir(2, false)">Exportar XLS</button>
+                        </mat-menu>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+            <!-- / CONTENT -->
+        </div>
+    </form>
+</div>

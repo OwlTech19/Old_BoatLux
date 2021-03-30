@@ -1,0 +1,15 @@
+body {
+}
+
+.toogle-group {
+    display:flex;
+    line-height: 20px !important;
+    bottom: 0;
+    align-items: center;
+}
+
+.form-field-end {
+    display: flex;
+    margin-left: auto;
+    margin-right: 5rem;
+}

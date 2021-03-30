@@ -1,0 +1,9 @@
+diff a/SambanetCore.Application/ClientApp/src/app/modules/compras/pedidos-compras/pedidos-compras.component.html b/SambanetCore.Application/ClientApp/src/app/modules/compras/pedidos-compras/pedidos-compras.component.html	(rejected hunks)
+@@ -49,6 +49,7 @@
+                                     </mat-select>
+                                 </mat-form-field>
+                                 <mat-form-field fxFlex>
++                                    <input matInput type="date" placeholder="Data inicial" formControlName="filtroDataInicio">
+                                 </mat-form-field>
+                                 <mat-form-field fxFlex>
+                                     <input matInput type="date" placeholder="Data final" formControlName="filtroDataTermino">

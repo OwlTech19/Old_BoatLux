@@ -1,0 +1,23 @@
+<div class="header accent" style="padding: 0px 20px; height: 50px;" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="start center">
+    <div fxLayout="row" style="width: 100%">
+        <div fxFlex>
+            <!-- Título e Subtitulo para resoluções grandes -->
+            <div fxShow.xs="false" style="font-size: 15pt; font-weight: 600; line-height: 50px;">
+                {{subTitulo}}
+                <span fxShow.xs="false" class="secondary-text" style="font-style: normal; font-weight: 300; font-size: 14pt; font-style: normal;" *ngIf="titulo != null && titulo != ''">&nbsp;{{titulo}}</span>
+            </div>
+            <!-- Apenas Subtítulo com descrição do menu, para resoluções pequenas -->
+            <div fxShow.gt-xs="false" style="font-size: 12pt; font-weight: 600; line-height: 50px;">
+                {{subTitulo}}
+            </div>
+        </div>
+        <div fxFlex style="text-align: right; line-height: 50px;" *ngIf="!ocultaFavoritar">
+            <button mat-icon-button type="button" (click)="favoritarPagina()" *ngIf="!_favoritada" matTooltip="Adicionar aos favoritos">
+                <mat-icon>star_border</mat-icon>
+            </button>
+            <button mat-icon-button type="button" (click)="favoritarPagina()" *ngIf="_favoritada" matTooltip="Remover dos favoritos">
+                <mat-icon>star</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>

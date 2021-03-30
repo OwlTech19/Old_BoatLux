@@ -1,0 +1,114 @@
+<div id="dashboard-project" class="page-layout simple right-sidebar" fxLayout="row">
+
+
+
+    <!-- CENTER -->
+    <div class="center" fusePerfectScrollbar>
+
+        <!-- HEADER -->
+        <titulo-pagina subTitulo="Olá, {{loginData().nomeUsuario}}. " ocultaFavoritar="true"></titulo-pagina>
+        <!-- / HEADER -->
+        <!-- CONTENT -->
+        <div class="content">
+
+            <!-- Gráfico Volume de Vendas -->
+            <div class="main-widget" *ngIf="graficoVendas != null" hidden>
+
+                <div class="position-relative p-24"
+                     fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxLayout="column" fxLayoutAlign="start start">
+                        <span class="h2">Volume de vendas</span>
+                        <span class="h5 secondary-text">Em reais, por mês</span>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                        <div class="py-8 px-12 border-radius-2 line-height-1 mr-8 cursor-pointer" *ngFor="let item of graficoVendas.ranges"
+                             (click)="graficoVendas.selected = item"
+                             [ngClass]="{'blue-100': graficoVendas.selected === item}">
+                            {{item}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="position-relative h-256 pb-16">
+                    <canvas baseChart
+                            [datasets]="graficoVendas.datasets[graficoVendas.selected]"
+                            [labels]="graficoVendas.labels"
+                            [colors]="graficoVendas.colors"
+                            [options]="graficoVendas.options"
+                            [chartType]="graficoVendas.chartType">
+                    </canvas>
+                </div>
+
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column">
+                <!-- Gráfico Qtd Clientes -->
+                <div class="widget" fxFlex="50%" fxFlex.gt-sm="100%" *ngIf="graficoQtdClientes != null">
+
+                    <div class="fuse-card auto-width">
+
+                        <div class="p-16 pb-0" fxLayout="row wrap" fxLayoutAlign="start end">
+
+                            <div class="pr-16">
+                                <div class="h3 secondary-text">Clientes atendidos (Vendas PDV)</div>
+                                <div class="font-size-54 font-weight-300 line-height-1 mt-8">
+                                    {{graficoQtdClientes.total}}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="h-96 w-100-p" style="display: block" *ngIf="graficoQtdClientes.datasets">
+                            <canvas baseChart
+                                    [datasets]="graficoQtdClientes.datasets"
+                                    [labels]="graficoQtdClientes.labels"
+                                    [colors]="graficoQtdClientes.colors"
+                                    [options]="graficoQtdClientes.options"
+                                    [chartType]="graficoQtdClientes.chartType">
+                            </canvas>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Gráfico Ticket Médio -->
+                <div class="fuse-card auto-width mb-32" fxFlex="50%" fxFlex.gt-sm="100%" hidden>
+
+                    <div class="fuse-card auto-width">
+
+                        <div class="p-16 pb-0" fxLayout="row wrap" fxLayoutAlign="start end">
+
+                            <div class="pr-16">
+                                <div class="h3 secondary-text">Ticket médio (Vendas PDV)</div>
+                                <div class="font-size-54 font-weight-300 line-height-1 mt-8">
+                                    {{graficoTicketMedio.ticketMedio}}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="h-96 w-100-p" style="display: block">
+                            <canvas baseChart
+                                    [datasets]="graficoTicketMedio.datasets"
+                                    [labels]="graficoTicketMedio.labels"
+                                    [colors]="graficoTicketMedio.colors"
+                                    [options]="graficoTicketMedio.options"
+                                    [chartType]="graficoTicketMedio.chartType">
+                            </canvas>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- / CONTENT -->
+
+    </div>
+    <!-- / CENTER -->
+    <!-- SIDEBAR -->
+    <!-- / SIDEBAR -->
+
+</div>

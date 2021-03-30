@@ -1,0 +1,423 @@
+<div id="forms" class="page-layout simple fullwidth" fxLayout="column">
+    <!-- HEADER -->
+    <titulo-pagina titulo="Módulo Financeiro" subTitulo="Baixa de Contas a Receber"></titulo-pagina>
+    <!-- / HEADER -->
+    <!-- CONTENT -->
+    <div class="content p-24 vertical-stepper-wrapper">
+        <mat-card class="mat-elevation-z4">
+            <mat-card-content>
+                <form [formGroup]="buscaFormGroup" autocomplete="off" (submit)="buscarItens(true)">
+                    <mat-card class="search-filter-card">
+                        <mat-card-content>
+                            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                <controles-combo-loja #comboLoja multiLoja="true" fxFlex="50%" fxFlex.gt-sm="100%"></controles-combo-loja>
+                                <controles-busca-rapida #cliente tipo="cliente" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                            </div>
+                            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                <controles-busca-rapida #tipocliente tipo="tipocliente" fxFlex="50" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                <controles-busca-rapida #tipodocumento tipo="tipodocumento" fxFlex="50" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                            </div>
+                            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                <mat-form-field fxFlex="30" class="pl-4">
+                                    <mat-select placeholder="Filtrar data" formControlName="opcaoTipoData">
+                                        <mat-option value="1">Data de vencimento</mat-option>
+                                        <mat-option value="2">Data de emissão</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field fxFlex>
+                                    <input matInput ngxDaterangepickerMd
+                                           placeholder="Período"
+                                           formControlName="periodo"
+                                           [autoApply]="false"
+                                           [showClearButton]="true"
+                                           [alwaysShowCalendars]="true"
+                                           [ranges]="ranges"
+                                           type="text"
+                                           readonly>
+                                </mat-form-field>
+                            </div>
+                        </mat-card-content>
+                        <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                            <mat-accordion>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Mais opções de filtros
+                                        </mat-panel-title>
+                                        <mat-panel-description>
+                                            Docto/Nota, valor, etc.
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
+                                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                        <mat-form-field fxFlex="30">
+                                            <mat-label>ID</mat-label>
+                                            <input type="text" matInput formControlName="receberId" placeholder="Filtre pelo ID do título. Exemplo: 123">
+                                        </mat-form-field>
+                                        <mat-form-field fxFlex="30">
+                                            <mat-label>Docto/Nota</mat-label>
+                                            <input type="text" matInput formControlName="notaEcf" placeholder="Filtre pelo docto/nota">
+                                        </mat-form-field>
+                                        <mat-form-field fxFlex="30">
+                                            <mat-label>Número do título</mat-label>
+                                            <input type="text" matInput formControlName="numTit" placeholder="Filtre pelo número do título">
+                                        </mat-form-field>
+                                    </div>
+                                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                        <mat-form-field fxFlex="30">
+                                            <mat-label>Parcela</mat-label>
+                                            <input type="text" matInput maxlength="6" formControlName="parcela" placeholder="Filtre pela parcela. Exemplo: 2">
+                                        </mat-form-field>
+                                        <mat-form-field fxFlex="30">
+                                            <mat-label>Valor</mat-label>
+                                            <input matInput formControlName="valor" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: true, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }" placeholder="Filter pelo valor. Exemplo: 200,00." />
+                                        </mat-form-field>
+                                        <mat-form-field fxFlex="30" class="pl-4">
+                                            <mat-label>Cheque</mat-label>
+                                            <input type="text" matInput formControlName="cheque" placeholder="Filter pelo número do cheque">
+                                        </mat-form-field>
+                                    </div>
+                                </mat-expansion-panel>
+                            </mat-accordion>
+                        </div>
+                        <mat-card-actions>
+                            <!-- Menu operações -->
+                            <button mat-raised-button type="button" color="basic" class="left-action-button" [matMenuTriggerFor]="menu" [disabled]="!selection.hasValue() || !_usuario.checkPermissionControl('269', 'editar')">
+                                <mat-icon>playlist_add_check</mat-icon>
+                                Operações
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="baixarTitulosSelecionados()" type="button">Baixar títulos selecionados</button>
+                                <button mat-menu-item (click)="baixarTitulosPorValor()" type="button">Baixar títulos por valor</button>
+                                <button mat-menu-item type="button" (click)="atribuirInformacaoTitulos()" *ngIf="_usuario.checkPermissionControl('267', 'editar')">Atribuir informações</button>
+                            </mat-menu>
+                            <!-- Botões -->
+                            <button mat-raised-button type="button" color="accent" class="cyan-bg" (click)="imprimirRelatorio()" *ngIf="_usuario.checkPermissionControl('269', 'imprimir')">
+                                <mat-icon>print</mat-icon>
+                                Imprimir
+                            </button>
+                            <button mat-raised-button type="button" color="accent" class="orange-bg" (click)="definirDadosPadrao()">
+                                <mat-icon>clear</mat-icon>
+                                Limpar
+                            </button>
+                            <button mat-raised-button type="submit" color="accent" class="blue-bg">
+                                <mat-icon>search</mat-icon>
+                                Buscar
+                            </button>
+                        </mat-card-actions>
+                    </mat-card>
+                    <!-- Totalizações -->
+                    <mat-accordion>
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Totais dos títulos
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div>
+                                <div>
+                                    <table width="100%" cellspacing="2" cellpadding="2">
+                                        <tr>
+                                            <th class="title">Títulos</th>
+                                        </tr>
+                                        <tr fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                            <td align="right" fxFlex>
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend-style1">R$ total</legend>
+                                                    <span>
+                                                        <input matInput currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: true, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                                               placeholder=""
+                                                               [(ngModel)]="totalTitulos"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               readonly />
+                                                    </span>
+                                                </fieldset>
+                                            </td>
+                                            <td align="right" fxFlex>
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend-style1">R$ juros</legend>
+                                                    <span>
+                                                        <input matInput currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                                               placeholder=""
+                                                               [(ngModel)]="totalJuros"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               readonly />
+                                                    </span>
+                                                </fieldset>
+                                            </td>
+                                            <td align="right" fxFlex>
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend-style1">R$ multa</legend>
+                                                    <span>
+                                                        <input matInput currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                                               placeholder=""
+                                                               [(ngModel)]="totalMulta"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               readonly />
+                                                    </span>
+                                                </fieldset>
+                                            </td>
+                                            <td align="right" fxFlex>
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend-style1">R$ descontos</legend>
+                                                    <span>
+                                                        <input matInput currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                                               placeholder=""
+                                                               [(ngModel)]="totalDesconto"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               readonly />
+                                                    </span>
+                                                </fieldset>
+                                            </td>
+                                            <td align="right" fxFlex>
+                                                <fieldset class="legend-style1">
+                                                    <legend class="legend-style1">R$ a receber</legend>
+                                                    <span>
+                                                        <input matInput currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: true, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                                               placeholder=""
+                                                               [(ngModel)]="valorReceber"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               readonly />
+                                                    </span>
+                                                </fieldset>
+                                            </td>
+                                            <td align="right" fxFlex [hidden]="!exibeInfoClie">
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend-style2">Lim. crédito</legend>
+                                                    <span>
+                                                        <input matInput currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                                               placeholder=""
+                                                               [(ngModel)]="limiteCred"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               readonly />
+                                                    </span>
+                                                </fieldset>
+                                            </td>
+                                            <td align="right" fxFlex [hidden]="!exibeInfoClie">
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend-style2">Saldo do cliente</legend>
+                                                    <span>
+                                                        <input matInput currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: true, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                                               placeholder=""
+                                                               [(ngModel)]="saldoClie"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               readonly />
+                                                    </span>
+                                                </fieldset>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                    <table width="100%" cellspacing="2" cellpadding="2">
+                                        <tr>
+                                            <th class="title">Selecionados</th>
+                                        </tr>
+                                        <tr fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                            <td align="right" fxFlex>
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend-style1">R$ total</legend>
+                                                    <span>
+                                                        <input matInput currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: true, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                                               placeholder=""
+                                                               [(ngModel)]="totalSelecionados"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               readonly />
+                                                    </span>
+                                                </fieldset>
+                                            </td>
+                                            <td align="right" fxFlex>
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend-style1">R$ juros</legend>
+                                                    <span>
+                                                        <input matInput currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                                               placeholder=""
+                                                               [(ngModel)]="jurosSelecionados"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               readonly />
+                                                    </span>
+                                                </fieldset>
+                                            </td>
+                                            <td align="right" fxFlex>
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend-style1">R$ multa</legend>
+                                                    <span>
+                                                        <input matInput currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                                               placeholder=""
+                                                               [(ngModel)]="multaSelecionados"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               readonly />
+                                                    </span>
+                                                </fieldset>
+                                            </td>
+                                            <td align="right" fxFlex>
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend-style1">R$ descontos</legend>
+                                                    <span>
+                                                        <input matInput currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                                               placeholder=""
+                                                               [(ngModel)]="descontoSelecionados"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               readonly />
+                                                    </span>
+                                                </fieldset>
+                                            </td>
+                                            <td align="right" fxFlex>
+                                                <fieldset class="fieldset">
+                                                    <legend class="legend-style2">R$ a receber</legend>
+                                                    <span>
+                                                        <input matInput currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: true, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                                               placeholder=""
+                                                               [(ngModel)]="valorReceberSelecionados"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               readonly />
+                                                    </span>
+                                                </fieldset>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                    <!-- Totalizações -->
+                    <mat-card *ngIf="exibeItensCarregando" class="mt-20" style="display: flex; justify-content: center; align-items: center">
+                        <div>
+                            <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                            </mat-progress-spinner>
+                        </div>
+                        <div style="padding-left: 15px;">
+                            <h2>
+                                Buscando itens...
+                            </h2>
+                        </div>
+                    </mat-card>
+                    <div *ngIf="!exibeItensCarregando && !temItens" class="alert alert-warning mt-20" role="alert">
+                        <mat-icon>warning</mat-icon>
+                        Não encontramos resultados para sua busca. Altere os filtros e tente novamente.
+                    </div>
+                    <!-- Legenda -->
+                    <controles-legenda [hidden]="!temItens" #legenda
+                                       [itens]="[{titulo: 'Vencimento Hoje', cor: 'indigo'},
+                                                 {titulo: 'Vencidos até 30 dias', cor: 'blue'},
+                                                 {titulo: 'Vencidos entre 30 e 60 dias', cor: 'pink'},
+                                                 {titulo: 'Vencidos + 60 dias', cor: 'orange'}]"></controles-legenda>
+                    <div [hidden]="exibeItensCarregando || !temItens">
+                        <div class="table-scroller">
+                            <table mat-table class="table table-medium table-hover" [dataSource]="itensDataSource" matSortActive="receberid" matSort multiTemplateDataRows>
+                                <ng-container matColumnDef="select">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                      [checked]="selection.hasValue() && isAllSelected()"
+                                                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                        </mat-checkbox>
+                                    </th>
+                                    <td mat-cell *matCellDef="let item">
+                                        <mat-checkbox (click)="$event.stopPropagation()"
+                                                      (change)="$event ? selection.toggle(item.receberId) : null; addSelectionModel(item, $event.checked); calcularSelecionados();"
+                                                      [checked]="selection.isSelected(item.receberId)">
+                                        </mat-checkbox>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="codlojaid">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Loja</th>
+                                    <td mat-cell *matCellDef="let item">{{item.codLojaId}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="receberid">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                                    <td mat-cell *matCellDef="let item">{{item.receberId}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="numtit">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Número do título</th>
+                                    <td mat-cell *matCellDef="let item">{{item.numTit}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="parcela">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Parcela</th>
+                                    <td mat-cell *matCellDef="let item">{{item.parcela}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="notaecf">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Docto/Nota</th>
+                                    <td mat-cell *matCellDef="let item">{{item.notaEcf}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="razao">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
+                                    <td mat-cell *matCellDef="let item" matTooltip="Fantasia: {{item.fantasia}}">{{item.codClieId}} - {{item.razao}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="dtemissao">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Emissão</th>
+                                    <td mat-cell *matCellDef="let item">{{item.dtEmissao}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="dtvencto">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Vencimento</th>
+                                    <td mat-cell *matCellDef="let item">{{item.dtVencto}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="dtvenctooriginal">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header [hidden]="!exibeDtVenctoOriginal">Vencimento Original</th>
+                                    <td mat-cell *matCellDef="let item" [hidden]="!exibeDtVenctoOriginal">{{item.dtVenctoOriginal}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="valorreceber">
+                                    <th mat-header-cell *matHeaderCellDef>R$ Receber</th>
+                                    <td mat-cell *matCellDef="let item">{{item.valorReceber}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="valorjuros">
+                                    <th mat-header-cell *matHeaderCellDef>R$ Juros</th>
+                                    <td mat-cell *matCellDef="let item">
+                                        <input matInput
+                                               currencyMask [options]="{ prefix: 'R$', suffix: '', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                                               [(ngModel)]="item.valorJuros"
+                                               [ngModelOptions]="{standalone: true}" />
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="valormulta">
+                                    <th mat-header-cell *matHeaderCellDef>R$ Multa</th>
+                                    <td mat-cell *matCellDef="let item">
+                                        <input matInput
+                                               currencyMask [options]="{ prefix: 'R$', suffix: '', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                                               [(ngModel)]="item.valorMulta"
+                                               [ngModelOptions]="{standalone: true}" />
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="valordesconto">
+                                    <th mat-header-cell *matHeaderCellDef>R$ Desconto</th>
+                                    <td mat-cell *matCellDef="let item">
+                                        <input matInput
+                                               currencyMask [options]="{ prefix: 'R$', suffix: '', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                                               [(ngModel)]="item.valorDesconto"
+                                               [ngModelOptions]="{standalone: true}" />
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="valor">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>R$ Título</th>
+                                    <td mat-cell *matCellDef="let item">{{item.valor}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="acoes" stickyEnd>
+                                    <th mat-header-cell *matHeaderCellDef style="text-align: right !important;">Ações</th>
+                                    <td mat-cell *matCellDef="let item;" style="text-align: right;">
+                                        <button type="button" mat-icon-button aria-label="Consultar Cupom/NF" (click)="consultarCupomNf(item)" class="green-fg" matTooltip="Consultar Cupom / NF-e" *ngIf="item.codNf > 0 || item.codLanctoPdv != null">
+                                            <mat-icon>remove_red_eye</mat-icon>
+                                        </button>
+                                        <button type="button" mat-icon-button aria-label="Consultar" (click)="consultarTitulo(item)" class="blue-fg" matTooltip="Consultar Título" *ngIf="_usuario.checkPermissionControl('269', 'consultar')">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                        <button type="button" mat-icon-button aria-label="Baixar" (click)="baixarIndividual(item.receberId, item.codLojaId)" class="fuse-black-500-fg" matTooltip="Baixar título" *ngIf="_usuario.checkPermissionControl('269', 'editar')">
+                                            <mat-icon>money</mat-icon>
+                                        </button>
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="colunasItens;"></tr>
+                                <tr mat-row *matRowDef="let row; columns: colunasItens;"
+                                    [ngClass]="{'blue-fg'  : _utils.verificarVencidosTrinta(row.dtVencto),
+                                                'pink-fg'  : _utils.verificarVencidosTrintaSessenta(row.dtVencto),
+                                                'orange-fg': _utils.verificarVencidosSessenta(row.dtVencto),
+                                                'indigo-fg': row.venceHoje,
+                                                'text-bold':  row.venceHoje}"></tr>
+                            </table>
+                        </div>
+                        <mat-paginator [pageSizeOptions]="[10, 50]" showFirstLastButtons></mat-paginator>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <!-- / CONTENT -->
+</div>

@@ -1,0 +1,10 @@
+.example-chip-list {
+    width: 100%;
+}
+
+#conteudo {
+    width: 300px;
+    word-wrap: break-word;
+    display: inline-block;
+    text-align: justify;
+}

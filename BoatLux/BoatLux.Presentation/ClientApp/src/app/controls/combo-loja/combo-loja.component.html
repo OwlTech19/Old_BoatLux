@@ -1,0 +1,24 @@
+<mat-form-field fxFlex>
+    <mat-label>{{label}}</mat-label>
+    <mat-select #matSelect [formControl]="lojaFormControl" [multiple]="multiLoja" autoFocus placeholder="{{placeholder}}" (selectionChange)="dispararEventoAlteracao()">
+        <a *ngIf="multiLoja" (click)="marcarDesmarcarTodas(matSelect);" style="cursor: pointer; padding: 0px 16px; line-height: 40px; font-size: 9pt; color: black; font-weight: bold;">
+            <span *ngIf="marcarTodas">Marcar todas as lojas</span>
+            <span *ngIf="!marcarTodas">Desmarcar todas as lojas</span>
+        </a>
+        <mat-option *ngFor="let loja of lojasDisponiveis" value="{{loja.id}}">Loja {{loja.id}} ({{loja.name}})</mat-option>
+        <mat-select-trigger>
+            <span *ngIf="lojaFormControl.value?.length == 1">
+                {{'Loja ' + lojaFormControl.value[0]}}
+            </span>
+            <span *ngIf="lojaFormControl.value?.length == 2">
+                {{'Loja ' + lojaFormControl.value[0]}} e {{'Loja ' + lojaFormControl.value[1]}}
+            </span>
+            <span *ngIf="lojaFormControl.value?.length == 3">
+                {{'Loja ' + lojaFormControl.value[0]}}, {{'Loja ' + lojaFormControl.value[1]}} e {{'Loja ' + lojaFormControl.value[2]}}
+            </span>            
+            <span *ngIf="lojaFormControl.value?.length > 3">
+                {{'Loja ' + lojaFormControl.value[0]}} (+{{lojaFormControl.value.length - 1}} {{lojaFormControl.value?.length === 2 ? 'loja' : 'lojas'}})
+            </span>
+        </mat-select-trigger>
+    </mat-select>
+</mat-form-field>

@@ -1,0 +1,26 @@
+<form [formGroup]="dadosFormGroup" autocomplete="off">
+    <h1 mat-dialog-title>
+        Dados para gerar Contas a Receber
+        <button type="button" mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+    </h1>
+    <mat-dialog-content>
+        <div>
+            <controles-busca-rapida #centrodecusto tipo="centrodecusto" fxLayout="column"></controles-busca-rapida>
+            <controles-busca-rapida #tipodocumento tipo="tipodocumento" fxLayout="column"></controles-busca-rapida>
+            <controles-busca-rapida #banco tipo="banco" fxLayout="column"></controles-busca-rapida>
+            <controles-busca-rapida #operacaofinanceira tipo="operacaofinanceira" fxLayout="column"></controles-busca-rapida>
+            <controles-busca-rapida #condPagto tipo="condPagto"></controles-busca-rapida>
+        </div>
+        
+        <mat-card-actions fxLayoutAlign="end" fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+            <button type="button" mat-raised-button color="accent" class="grey-bg mr-8" (click)="dialogRef.close()">
+                <mat-icon>cancel</mat-icon>
+                Cancelar
+            </button>
+            <button type="button" mat-raised-button color="accent" class="green-bg" (click)="gerarReceber()">
+                <mat-icon>check</mat-icon>
+                Gerar
+            </button>
+        </mat-card-actions>
+    </mat-dialog-content>
+</form>

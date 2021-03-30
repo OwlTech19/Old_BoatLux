@@ -1,0 +1,108 @@
+<h1 mat-dialog-title>
+    {{titulo}}
+    <button type="button" mat-icon-button (click)="dialogRef.close()" style="float:right;">
+        <mat-icon>close</mat-icon>
+    </button>
+</h1>
+<form fxLayout="column" autocomplete="off">
+    <mat-dialog-content>
+        <div class="content p-20">
+            <mat-card class="mat-elevation-z3">
+                <form [formGroup]="buscaFormGroup" autocomplete="off" (submit)="buscarItens()">
+                    <mat-card class="search-filter-card">
+                        <mat-card-content>
+                            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                                <mat-form-field fxFlex>
+                                    <mat-label>Razão ou fantasia</mat-label>
+                                    <input type="text" matInput formControlName="razao"
+                                        placeholder="Filtre pela razão social ou nome fantasia do fornecedor.">
+                                </mat-form-field>
+                            </div>
+                            <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px"
+                                fxLayoutGap.lt-md="0px">
+                                <mat-form-field fxFlex>
+                                    <mat-label>CPF/CNPJ</mat-label>
+                                    <input type="text" matInput formControlName="cnpjCpf"
+                                        placeholder="Filtre pelo CPF/CNPJ do fornecedor.">
+                                </mat-form-field>
+                                <mat-form-field fxFlex>
+                                    <mat-label>ID</mat-label>
+                                    <input type="number" matInput formControlName="fornecedorId"
+                                        placeholder="Filtre pelo código do fornecedor.">
+                                </mat-form-field>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                    <mat-card-actions align="end">
+                        <!-- Botões -->
+                        <button mat-raised-button type="button" color="accent" class="orange-bg" (click)="limparBusca()"
+                            [disabled]="!buscaFormGroup.dirty">
+                            <mat-icon>clear</mat-icon>
+                            Limpar
+                        </button>
+                        <button mat-raised-button type="submit" color="accent" class="blue-bg">
+                            <mat-icon>search</mat-icon>
+                            Buscar
+                        </button>
+                    </mat-card-actions>
+                    <div [hidden]="exibeItensCarregando || !temItens">
+                        <div class="table-scroller">
+                            <table mat-table class="table table-small table-hover" [dataSource]="itensDataSource"
+                                matSortActive="fornecedorId" matSort multiTemplateDataRows>
+                                <ng-container matColumnDef="select">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                            [checked]="itensSelecionados.hasValue() && isAllSelected()"
+                                            [indeterminate]="itensSelecionados.hasValue() && !isAllSelected()">
+                                        </mat-checkbox>
+                                    </th>
+                                    <td mat-cell *matCellDef="let item">
+                                        <mat-checkbox (click)="$event.stopPropagation()"
+                                            (change)="$event ? itensSelecionados.toggle(item) : null"
+                                            [checked]="itensSelecionados.isSelected(item)">
+                                        </mat-checkbox>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="fornecedorId">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                                    <td mat-cell *matCellDef="let item" class="table-column-left">{{item.fornecedorId}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="cnpjCpf">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>CPF/CNPJ</th>
+                                    <td mat-cell *matCellDef="let item" class="table-column-left">{{item.cnpjCpf}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="razao">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Razão</th>
+                                    <td mat-cell *matCellDef="let item">{{item.razao}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="celular">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Celular</th>
+                                    <td mat-cell *matCellDef="let item">{{item.celular}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="email">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>E-mail</th>
+                                    <td mat-cell *matCellDef="let item">{{item.email}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="senha">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Senha</th>
+                                    <td mat-cell *matCellDef="let item">{{item.senha}}</td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="colunasItens;"></tr>
+                                <tr mat-row *matRowDef="let row; columns: colunasItens;"></tr>
+                            </table>
+                        </div>
+                        <mat-paginator [pageSizeOptions]="[10, 50]" showFirstLastButtons></mat-paginator>
+                    </div>
+                </form>
+            </mat-card>
+        </div>
+    </mat-dialog-content>
+    <div align="end">
+        <button mat-raised-button type="button" color="accent" class="fuse-black-300-bg" (click)="reenviarSenha()"
+            matTooltip="Reenviar senhas para fornecedores selecionados">
+            <mat-icon>send</mat-icon>
+            Reenviar senhas
+        </button>
+    </div>
+</form>

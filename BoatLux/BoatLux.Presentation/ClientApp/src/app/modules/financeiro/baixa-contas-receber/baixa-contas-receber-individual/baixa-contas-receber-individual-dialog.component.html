@@ -1,0 +1,196 @@
+<h1 mat-dialog-title>
+    Baixar Contas a Receber - Individual
+    <button mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+</h1>
+<mat-dialog-content>
+    <form fxLayout="column" [formGroup]="baixaFormGroup" autocomplete="off">
+        <mat-card-content>
+            <div [style.pointer-events]="desabilitaCampo(1)" [style.opacity]="desabilitaCampo(2)">
+                <div fxLayout="column">
+                    <controles-combo-loja #comboLoja (aoSelecionarLoja)="aoSelecionarLoja()"></controles-combo-loja>
+                </div>
+                <div fxLayout="column">
+                    <controles-busca-rapida #cliente tipo="cliente"></controles-busca-rapida>
+                </div>
+                <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                    <mat-form-field fxFlex="30" fxFlex.gt-sm="100%">
+                        <mat-label>Valor</mat-label>
+                        <input matInput
+                               formControlName="valor"
+                               currencyMask [options]="{ prefix: 'R$', suffix: '', thousands: '.', decimal: ',', allowNegative: true, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                               readonly />
+                    </mat-form-field>
+                    <mat-form-field fxFlex="30" fxFlex.gt-sm="100%">
+                        <input matInput ngxDaterangepickerMd placeholder="Data de emissão"
+                               formControlName="dtEmissao"
+                               [autoApply]="false"
+                               [singleDatePicker]="true"
+                               [locale]="locale"
+                               type="text"
+                               readonly>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="30" fxFlex.gt-sm="100%">
+                        <input matInput ngxDaterangepickerMd placeholder="Data de vencimento"
+                               formControlName="dtVencto"
+                               [autoApply]="false"
+                               [singleDatePicker]="true"
+                               [locale]="locale"
+                               type="text"
+                               readonly>
+                    </mat-form-field>
+                </div>
+                <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                    <mat-form-field fxFlex="30" fxFlex.gt-sm="100%">
+                        <mat-label>Juros</mat-label>
+                        <input matInput
+                               formControlName="valorJuros"
+                               currencyMask [options]="obterMaskJuros()"
+                               readonly />
+                    </mat-form-field>
+                    <mat-form-field fxFlex="30" fxFlex.gt-sm="100%">
+                        <mat-label>Multa</mat-label>
+                        <input matInput
+                               formControlName="valorMulta"
+                               currencyMask [options]="obterMaskMulta()"
+                               readonly />
+                    </mat-form-field>
+                    <mat-form-field fxFlex="30" fxFlex.gt-sm="100%">
+                        <mat-label>Desconto</mat-label>
+                        <input matInput
+                               formControlName="valorDesconto"
+                               currencyMask [options]="obterMaskDesconto()"
+                               readonly />
+                    </mat-form-field>
+                </div>
+                <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                    <mat-form-field fxFlex="30" class="form-field-end">
+                        <mat-label>Carência para juros</mat-label>
+                        <input type="number" matInput
+                               formControlName="carenciaJuros"
+                               placeholder="Carência (dias)"
+                               readonly>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="30" class="form-field-end">
+                        <mat-label>Carência para multa</mat-label>
+                        <input type="number" matInput
+                               formControlName="carenciaMulta"
+                               placeholder="Carência (dias)"
+                               readonly>
+                    </mat-form-field>
+                </div>
+            </div>
+            <mat-accordion class="mat-elevation-z5">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Mais informações do título
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            Parcela, C. Custo, etc.
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div [style.pointer-events]="desabilitaCampo(1)" [style.opacity]="desabilitaCampo(2)">
+                        <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                            <mat-form-field fxFlex="40%" fxFlex.gt-sm="100%">
+                                <mat-label>Número do título</mat-label>
+                                <input type="text" matInput formControlName="numTitulo" maxlength="15" placeholder="Número do título" readonly>
+                            </mat-form-field>
+                            <mat-form-field fxFlex="20%" fxFlex.gt-sm="100%">
+                                <mat-label>Parcelas</mat-label>
+                                <input type="number" matInput
+                                       formControlName="parcela"
+                                       placeholder="Qtd. de parcelas"
+                                       readonly>
+                            </mat-form-field>
+                            <controles-busca-rapida #tipodocumento tipo="tipodocumento" fxFlex="40%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                        </div>
+                        <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                            <controles-busca-rapida #operacaofinanceira tipo="operacaofinanceira" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                            <controles-busca-rapida #centrodecusto tipo="centrodecusto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                        </div>
+                        <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                            <controles-busca-rapida #vendedor tipo="vendedor" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                            <controles-busca-rapida #banco tipo="banco" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+
+            <br />
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                <mat-form-field fxFlex="50" fxFlex.gt-sm="100%">
+                    <mat-label>Despesas com Cartório</mat-label>
+                    <input matInput
+                           formControlName="despCartorio"
+                           maxlength="16"
+                           currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                           placeholder="Digite o R$ de despesas com cartório"
+                           min="0"
+                           oninput="validity.valid || (value=0);"
+                           (ngModelChange)="calcularValorReceber()" />
+                </mat-form-field>
+                <mat-form-field fxFlex="50" fxFlex.gt-sm="100%">
+                    <mat-label>Outras despesas</mat-label>
+                    <input matInput
+                           formControlName="outrasDesp"
+                           maxlength="16"
+                           currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                           placeholder="Digite o R$ de outras despesas"
+                           min="1"
+                           oninput="validity.valid || (value=0);"
+                           (ngModelChange)="calcularValorReceber()" />
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                <mat-form-field fxFlex="50" fxFlex.gt-sm="100%">
+                    <input matInput ngxDaterangepickerMd placeholder="Data de Pagamento"
+                           formControlName="dtPagto"
+                           [autoApply]="false"
+                           [singleDatePicker]="true"
+                           [locale]="locale"
+                           [minDate]="minDate"
+                           [maxDate]="maxDate"
+                           type="text"
+                           readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex="50" fxFlex.gt-sm="100%">
+                    <mat-label>Valor a Receber</mat-label>
+                    <input matInput
+                           placeholder="Digite o valor a receber. Exemplo: 200,00."
+                           formControlName="valorPago"
+                           maxlength="16"
+                           currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                           min="0"
+                           oninput="validity.valid || (value=0);"/>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                <controles-busca-rapida #conta tipo="conta" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                <controles-busca-rapida #formapg tipo="formapg" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                <controles-busca-rapida #operacaofinanceirabaixa tipo="operacaofinanceira" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                    <mat-label>Docto/Nota</mat-label>
+                    <input type="text" matInput formControlName="numDocto" placeholder="Número do Docto/Nota">
+                </mat-form-field>
+            </div>
+            <div fxLayout="column">
+                <mat-form-field class="textarea-full-width">
+                    <mat-label>Observação</mat-label>
+                    <textarea matInput formControlName="observacao" maxlength="100" placeholder="Digite a observação do título a receber"></textarea>
+                </mat-form-field>
+            </div>
+        </mat-card-content>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button type="button" mat-button class="grey-300-bg" (click)="fecharJanela(false)">
+        <mat-icon>cancel</mat-icon>
+        <span fxShow.xs="false">Cancelar</span>
+    </button>
+    <button type="button" mat-raised-button color="accent" class="green-bg" (click)="baixarTitulo()">
+        <mat-icon>save</mat-icon>
+        <span fxShow.xs="false">Baixar Título</span>
+    </button>
+</mat-dialog-actions>

@@ -1,0 +1,38 @@
+<form [formGroup]="associaFormGroup" autocomplete="off">
+    <h1 mat-dialog-title>
+        Associar produto ao fornecedor
+        <button type="button" mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+    </h1>
+    <mat-dialog-content>
+        <div fxflex fxLayout="column">
+            <mat-label style="font-weight:bold">{{produto}}</mat-label>
+        </div>
+        <br />
+        <div fxflex fxLayout="column">
+            <controles-busca-rapida #fornecedor tipo="fornecedor"></controles-busca-rapida>
+        </div>
+        <div fxflex fxLayout="column">
+            <mat-card-content fxLayout="column">
+                <mat-form-field>
+                    <mat-label>Código de refêrencia NF</mat-label>
+                    <input matInput formControlName="codRef" placeholder="Código de referência NF" maxlength="25"/>
+                </mat-form-field>
+            </mat-card-content>
+        </div>
+        <div fxflex fxLayout="column">
+            <mat-checkbox class="example-margin" formControlName="fabricante">Fabricante</mat-checkbox>
+            <br />
+            <mat-checkbox class="example-margin" formControlName="enviarDadosBalanca">Enviar dados para balança</mat-checkbox>
+        </div>
+        <mat-card-actions fxLayoutAlign="end">
+            <button type="button" mat-raised-button class="grey-300-bg" (click)="dialogRef.close()">
+                <mat-icon>cancel</mat-icon>
+                Cancelar
+            </button>
+            <button type="button" mat-raised-button color="accent" class="green-bg" (click)="associarProdutoFornecedor()">
+                <mat-icon>check</mat-icon>
+                Associar
+            </button>
+        </mat-card-actions>
+    </mat-dialog-content>
+</form>

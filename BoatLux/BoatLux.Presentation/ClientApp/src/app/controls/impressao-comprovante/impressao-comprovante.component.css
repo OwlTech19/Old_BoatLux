@@ -1,0 +1,91 @@
+* {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    margin: 0;
+    padding: 0;
+}
+
+body, table {
+    font-family: 'Arial';
+    line-height: 1.4;
+    width: 70mm;
+    font-size: 10px;
+}
+
+hr {
+    text-align: center;
+    width: 68mm;
+}
+
+.reduzida {
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    height: auto;
+}
+
+.label-small {
+    font-family: 'Arial';
+    line-height: 1.4;
+    width: 70mm;
+    font-size: 10px;
+}
+
+.label-bold {
+    font-weight: bold;
+}
+
+@page {
+    margin: 0;
+    margin-left: 2mm;
+    margin-right: 2mm;
+    size: auto;
+}
+
+@media print {
+
+    * {
+        font-size: 10px;
+        font-family: 'Arial';
+    }
+
+    .reduzida {
+        margin: 0;
+        margin-left: 2mm;
+        margin-right: 2mm;
+        padding: 0;
+        border: 0;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        page-break-after: always;
+        background: transparent none;
+        width: 76mm;
+    }
+
+        .reduzida .cabecalho {
+            text-align: center;
+        }
+
+    #header, #footer, #nav {
+        display: none !important;
+    }
+
+
+    hr {
+        text-align: center;
+        width: 65mm;
+    }
+
+    #wrapper,
+    #content {
+        width: auto;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        float: none !important;
+        color: black;
+        background: transparent none;
+    }
+}

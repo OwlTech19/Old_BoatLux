@@ -1,0 +1,49 @@
+<h1 mat-dialog-title>
+    {{titulo}}
+    <button mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+</h1>
+<mat-dialog-content>
+    <form fxLayout="column" [formGroup]="atribuirFormGroup" autocomplete="off">
+        <mat-form-field fxFlex>
+            <mat-label>Data de vencimento</mat-label>
+            <input matInput ngxDaterangepickerMd placeholder="Data de vencimento"
+                   formControlName="dtVencto"
+                   [autoApply]="false"
+                   [singleDatePicker]="true"
+                   [showClearButton]="true"
+                   [locale]="locale"
+                   type="text"
+                   readonly>
+        </mat-form-field>
+        <controles-busca-rapida #centrodecusto tipo="centrodecusto"></controles-busca-rapida>
+        <controles-busca-rapida #tipodocumento tipo="tipodocumento" fxFlex="30%"></controles-busca-rapida>
+        <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+            <mat-form-field fxFlex="30%" *ngIf="modulo == 'receber'">
+                <mat-label>% Juros / dia</mat-label>
+                <input type="text"
+                       matInput
+                       formControlName="juros"
+                       maxlength="8"
+                       currencyMask [options]="{ prefix: '', suffix: '% ', thousands: '.', decimal: ',', allowNegative: true, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                       placeholder="Juros"
+                       [readonly]="!atribuirFormGroup.value.atribJuros">
+            </mat-form-field>
+            <mat-checkbox class="example-margin" formControlName="atribJuros" fxFlex="70%" *ngIf="modulo == 'receber'" matTooltip="Marcar esta opção para atribuir Juros">Atribuir juros</mat-checkbox>
+        </div>
+        <div fxLayout="column">
+            <controles-busca-rapida #vendedor tipo="vendedor" [hidden]="!exibeVendedor"></controles-busca-rapida>
+        </div>
+    </form>
+    <div>
+        <strong>Atenção:</strong>
+        <br />
+        <mat-card-subtitle class="indigo-fg" style="font:bold">1°.Serão atualizados apenas os campos informados.</mat-card-subtitle>
+        <mat-card-subtitle class="indigo-fg" style="font:bold">2°.A data de vencimento será atualizada apenas para títulos em aberto. </mat-card-subtitle>
+        <mat-card-subtitle class="indigo-fg" style="font:bold">3°.Serão atualizados apenas títulos com data de emissão inferior a de vencimento. </mat-card-subtitle>
+        <mat-card-subtitle class="indigo-fg" style="font:bold" *ngIf="modulo == 'receber'">4°.O juros será atualizado somente quando marcada opção Atribuir juros. </mat-card-subtitle>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button class="grey-300-bg" (click)="fecharJanela(false)">Cancelar</button>
+    <button mat-raised-button color="accent" class="green-bg" [mat-dialog-close]="data" (click)="atribuirInformacoes();">Atribuir</button>
+</mat-dialog-actions>

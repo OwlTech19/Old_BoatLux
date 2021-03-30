@@ -1,0 +1,388 @@
+<h1 mat-dialog-title>
+    Informações do produto
+    <button mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+</h1>
+<mat-dialog-content>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+        <div fxFlex>
+            <mat-form-field fxFlex>
+                <mat-label>Produto</mat-label>
+                <input matInput value="{{data.descricao}}" disabled />
+
+            </mat-form-field>
+        </div>
+        <div fxFlex>
+            <controles-combo-loja #comboLoja multiLoja="true" (alterado)="lojasAlteradas()"></controles-combo-loja>
+        </div>
+    </div>
+
+    <mat-tab-group>
+        <mat-tab label="Últimas vendas">
+            <mat-tab-group>
+                <mat-tab label="Diárias - Últimos 30 dias">
+                    <mat-card *ngIf="estaCarregandoResumoVendasProduto" class="mt-20" style="display: flex; justify-content: center; align-items: center">
+                        <div>
+                            <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                            </mat-progress-spinner>
+                        </div>
+                        <div style="padding-left: 15px;">
+                            <h2>
+                                Carregando vendas diárias...
+                            </h2>
+                        </div>
+                    </mat-card>
+                    <br />
+                    <div *ngIf="!estaCarregandoResumoVendasProduto && resumoVendasProduto != null && (resumoVendasProduto.diarias == null || resumoVendasProduto.diarias.length == 0)" class="alert alert-warning" role="alert">
+                        <mat-icon>warning</mat-icon>
+                        Nenhum resultado encontrado.
+                    </div>
+                    <table class="table table-small table-striped table-hover" *ngIf="!estaCarregandoResumoVendasProduto && resumoVendasProduto != null && resumoVendasProduto.diarias != null && resumoVendasProduto.diarias.length > 0">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Qtd. vendida</th>
+                                <th>Variação</th>
+                                <th>R$ da venda</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of resumoVendasProduto.diarias">
+                                <td>{{item.data}}</td>
+                                <td>{{item.qtdTotal}}</td>
+                                <td>{{item.percVariacao}}</td>
+                                <td>{{item.valorTotal}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </mat-tab>
+                <mat-tab label="Semanais - Últimas 5 semanas">
+                    <mat-card *ngIf="estaCarregandoResumoVendasProduto" class="mt-20" style="display: flex; justify-content: center; align-items: center">
+                        <div>
+                            <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                            </mat-progress-spinner>
+                        </div>
+                        <div style="padding-left: 15px;">
+                            <h2>
+                                Carregando vendas semanais...
+                            </h2>
+                        </div>
+                    </mat-card>
+                    <br />
+                    <div *ngIf="!estaCarregandoResumoVendasProduto && resumoVendasProduto != null && (resumoVendasProduto.semanais == null || resumoVendasProduto.semanais.length == 0)" class="alert alert-warning" role="alert">
+                        <mat-icon>warning</mat-icon>
+                        Nenhum resultado encontrado.
+                    </div>
+                    <table class="table table-small table-striped table-hover" *ngIf="!estaCarregandoResumoVendasProduto && resumoVendasProduto != null && resumoVendasProduto.semanais != null && resumoVendasProduto.semanais.length > 0">
+                        <thead>
+                            <tr>
+                                <th>Início</th>
+                                <th>Término</th>
+                                <th>Qtd. vendida</th>
+                                <th>Variação</th>
+                                <th>R$ da venda</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of resumoVendasProduto.semanais">
+                                <td>{{item.inicio}}</td>
+                                <td>{{item.termino}}</td>
+                                <td>{{item.qtdTotal}}</td>
+                                <td>{{item.percVariacao}}</td>
+                                <td>{{item.valorTotal}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </mat-tab>
+                <mat-tab label="Mensais - Últimos 6 meses">
+                    <mat-card *ngIf="estaCarregandoResumoVendasProduto" class="mt-20" style="display: flex; justify-content: center; align-items: center">
+                        <div>
+                            <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                            </mat-progress-spinner>
+                        </div>
+                        <div style="padding-left: 15px;">
+                            <h2>
+                                Carregando vendas mensais...
+                            </h2>
+                        </div>
+                    </mat-card>
+                    <br />
+                    <div *ngIf="!estaCarregandoResumoVendasProduto && resumoVendasProduto != null && (resumoVendasProduto.diarias == null || resumoVendasProduto.mensais.length == 0)" class="alert alert-warning" role="alert">
+                        <mat-icon>warning</mat-icon>
+                        Nenhum resultado encontrado.
+                    </div>
+                    <table class="table table-small table-striped table-hover" *ngIf="!estaCarregandoResumoVendasProduto && resumoVendasProduto != null && resumoVendasProduto.mensais != null && resumoVendasProduto.mensais.length > 0">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Qtd. vendida</th>
+                                <th>Variação</th>
+                                <th>R$ venda</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of resumoVendasProduto.mensais">
+                                <td>{{item.mesAno}}</td>
+                                <td>{{item.qtdTotal}}</td>
+                                <td>{{item.percVariacao}}</td>
+                                <td>{{item.valorTotal}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-tab>
+        <mat-tab label="Últ. ent. NF">
+            <mat-card *ngIf="estaCarregandoResumoEntradasNfProduto" class="mt-20" style="display: flex; justify-content: center; align-items: center">
+                <div>
+                    <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                    </mat-progress-spinner>
+                </div>
+                <div style="padding-left: 15px;">
+                    <h2>
+                        Carregando entradas NF...
+                    </h2>
+                </div>
+            </mat-card>
+            <br />
+            <div *ngIf="!estaCarregandoResumoEntradasNfProduto && resumoEntradasNfProduto != null && (resumoEntradasNfProduto.entradas == null || resumoEntradasNfProduto.entradas.length == 0)" class="alert alert-warning" role="alert">
+                <mat-icon>warning</mat-icon>
+                Nenhum resultado encontrado.
+            </div>
+            <table class="table table-small table-striped table-hover" *ngIf="!estaCarregandoResumoEntradasNfProduto && resumoEntradasNfProduto != null && resumoEntradasNfProduto.entradas != null && resumoEntradasNfProduto.entradas.length > 0">
+                <thead>
+                    <tr>
+                        <th>Fornecedor</th>
+                        <th>NF</th>
+                        <th>Data</th>
+                        <th>Chave de acesso</th>
+                        <th>Qtd.</th>
+                        <th>Qtd. emb.</th>
+                        <th>R$ unit. NF</th>
+                        <th>R$ Markdown</th>
+                        <th>R$ C.M.V. NF</th>
+                        <th>Desconto</th>
+                        <th>Mg. líq.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of resumoEntradasNfProduto.entradas">
+                        <td>{{item.fornecId}}</td>
+                        <td>{{item.numNota}}</td>
+                        <td>{{item.dataEntrada}}</td>
+                        <td>{{item.chaveAcesso}}</td>
+                        <td>{{item.qtdNota}}</td>
+                        <td>{{item.qtdEmbalagem}}</td>
+                        <td>{{item.precoUnitario}}</td>
+                        <td>{{item.custoPmz}}</td>
+                        <td>{{item.custoProd}}</td>
+                        <td>{{item.desconto}}</td>
+                        <td>{{item.lucroLiquido}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </mat-tab>
+        <mat-tab label="Estoque/preços">
+
+
+            <mat-card *ngIf="estaCarregandoResumoEstoquePrecoProduto" class="mt-20" style="display: flex; justify-content: center; align-items: center">
+                <div>
+                    <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                    </mat-progress-spinner>
+                </div>
+                <div style="padding-left: 15px;">
+                    <h2>
+                        Carregando estoque/preço...
+                    </h2>
+                </div>
+            </mat-card>
+            <br />
+            <div *ngIf="!estaCarregandoResumoEstoquePrecoProduto && estoquePrecoDataSource.data == null" class="alert alert-warning" role="alert">
+                <mat-icon>warning</mat-icon>
+                Nenhum resultado encontrado.
+            </div>
+            <div [hidden]="estaCarregandoResumoEstoquePrecoProduto || estoquePrecoDataSource.data == null">
+                <table mat-table #table [dataSource]="estoquePrecoDataSource" class="table table-small table-striped table-hover" multiTemplateDataRows>
+                    <ng-container *ngFor="let column of colunasEstoquePreco" matColumnDef="{{column.columnDef}}">
+                        <th mat-header-cell *matHeaderCellDef>{{ column.header }}</th>
+                        <td mat-cell *matCellDef="let row">{{ row[column.columnDef] }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="tabelaFilho">
+                        <td mat-cell *matCellDef="let item;" [attr.colspan]="colunasEstoquePrecoDef.length">
+                            <div class="nestedMatTableWrapper">
+                                <table class="table table-small table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th *ngFor="let coluna of colunasEstoquePrecoLoja">{{coluna.header}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let subItem of item.lojas">
+                                            <td *ngFor="let coluna of colunasEstoquePrecoLoja">{{subItem[coluna.columnDef]}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="colunasEstoquePrecoDef"></tr>
+                    <tr mat-row *matRowDef="let row; columns: colunasEstoquePrecoDef;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: ['tabelaFilho']" style="background-color: #f8f8f8 !important; cursor: default !important;"></tr>
+                </table>
+            </div>
+
+
+        </mat-tab>
+        <mat-tab label="Últimas compras">
+            <br />
+            <mat-card *ngIf="estaCarregandoResumoComprasProduto" class="mt-20" style="display: flex; justify-content: center; align-items: center">
+                <div>
+                    <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                    </mat-progress-spinner>
+                </div>
+                <div style="padding-left: 15px;">
+                    <h2>
+                        Carregando últimas compras...
+                    </h2>
+                </div>
+            </mat-card>
+            <br />
+            <div *ngIf="!estaCarregandoResumoComprasProduto && comprasDataSource.data == null" class="alert alert-warning" role="alert">
+                <mat-icon>warning</mat-icon>
+                Nenhum resultado encontrado.
+            </div>
+            <div [hidden]="estaCarregandoResumoComprasProduto || comprasDataSource.data == null">
+                <table mat-table #table [dataSource]="comprasDataSource" class="table table-small table-striped table-hover">
+                    <ng-container *ngFor="let column of colunasCompras" matColumnDef="{{column.columnDef}}">
+                        <th mat-header-cell *matHeaderCellDef>{{ column.header }}</th>
+                        <td mat-cell *matCellDef="let row">{{ row[column.columnDef] }}</td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="colunasComprasDef"></tr>
+                    <tr mat-row *matRowDef="let row; columns: colunasComprasDef;"></tr>
+                </table>
+                <mat-paginator #comprasPaginator [pageSizeOptions]="[10, 50]" showFirstLastButtons></mat-paginator>
+            </div>
+        </mat-tab>
+        <mat-tab label="Família de preços">
+            <mat-card *ngIf="estaCarregandoResumoFamiliaPrecos" class="mt-20" style="display: flex; justify-content: center; align-items: center">
+                <div>
+                    <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                    </mat-progress-spinner>
+                </div>
+                <div style="padding-left: 15px;">
+                    <h2>
+                        Carregando itens da Família de Preços...
+                    </h2>
+                </div>
+            </mat-card>
+            <br />
+            <div *ngIf="!estaCarregandoResumoFamiliaPrecos && resumoFamiliaPrecos != null && (resumoFamiliaPrecos.itens == null || resumoFamiliaPrecos.itens.length == 0)" class="alert alert-warning" role="alert">
+                <mat-icon>warning</mat-icon>
+                Nenhum resultado encontrado.
+            </div>
+            <div fxLayout="column">
+                <mat-label style="font-weight:bold" *ngIf="!estaCarregandoResumoFamiliaPrecos && resumoFamiliaPrecos != null && resumoFamiliaPrecos.itens != null && resumoFamiliaPrecos.itens.length > 0">{{infoFamiliaPrecos}}</mat-label>
+            </div>
+            <br />
+            <table class="table table-small table-striped table-hover" *ngIf="!estaCarregandoResumoFamiliaPrecos && resumoFamiliaPrecos != null && resumoFamiliaPrecos.itens != null && resumoFamiliaPrecos.itens.length > 0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Barra</th>
+                        <th>Descrição PDV</th>
+                        <th>Estoque</th>
+                        <th>R$ Custo</th>
+                        <th>R$ Venda</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of resumoFamiliaPrecos.itens">
+                        <td>{{item.produtoId}}</td>
+                        <td>{{item.barra}}</td>
+                        <td>{{item.descricaoPdv}}</td>
+                        <td>{{item.estoque}}</td>
+                        <td>{{item.precoCusto}}</td>
+                        <td>{{item.precoVenda}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </mat-tab>
+        <mat-tab label="Últ. Alterações de preços">
+            <mat-card *ngIf="estaCarregandoResumoAlteracoesPrecos" class="mt-20" style="display: flex; justify-content: center; align-items: center">
+                <div>
+                    <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                    </mat-progress-spinner>
+                </div>
+                <div style="padding-left: 15px;">
+                    <h2>
+                        Carregando resumo de alterações de preços...
+                    </h2>
+                </div>
+            </mat-card>
+            <br />
+            <div *ngIf="!estaCarregandoResumoAlteracoesPrecos && resumoAlteracoesPrecos != null && (resumoAlteracoesPrecos.reajustes == null || resumoAlteracoesPrecos.reajustes.length == 0)" class="alert alert-warning" role="alert">
+                <mat-icon>warning</mat-icon>
+                Nenhum resultado encontrado.
+            </div>
+            <table class="table table-small table-striped table-hover" *ngIf="!estaCarregandoResumoAlteracoesPrecos && resumoAlteracoesPrecos != null && resumoAlteracoesPrecos.reajustes != null && resumoAlteracoesPrecos.reajustes.length > 0">
+                <thead>
+                    <tr>
+                        <th>ID Forma Venda</th>
+                        <th>Descrição</th>
+                        <th>Data</th>
+                        <th>R$ Ant.</th>
+                        <th>R$ Novo</th>
+                        <th>R$ Custo Ant.</th>
+                        <th>R$ Custo Novo</th>
+                        <th>Usuário</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of resumoAlteracoesPrecos.reajustes">
+                        <td>{{item.formaVendaId}}</td>
+                        <td>{{item.descricao}}</td>
+                        <td>{{item.data}}</td>
+                        <td>{{item.precoAnterior}}</td>
+                        <td>{{item.precoNovo}}</td>
+                        <td>{{item.custoAnterior}}</td>
+                        <td>{{item.custoNovo}}</td>
+                        <td>{{item.usuario}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </mat-tab>
+        <mat-tab label="Categoria">
+            <br />
+            <mat-card *ngIf="estaCarregandoResumoCategoriaProduto" class="mt-20" style="display: flex; justify-content: center; align-items: center">
+                <div>
+                    <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                    </mat-progress-spinner>
+                </div>
+                <div style="padding-left: 15px;">
+                    <h2>
+                        Carregando produtos da categoria...
+                    </h2>
+                </div>
+            </mat-card>
+            <br />
+            <div *ngIf="!estaCarregandoResumoCategoriaProduto && categoriasDataSource.data == null" class="alert alert-warning" role="alert">
+                <mat-icon>warning</mat-icon>
+                Nenhum resultado encontrado.
+            </div>
+            <div [hidden]="estaCarregandoResumoCategoriaProduto || categoriasDataSource.data == null">
+                <div fxLayout="column">
+                    <mat-label style="font-weight:bold">{{infoCategoria}}</mat-label>
+                </div>
+                <table mat-table #table [dataSource]="categoriasDataSource" class="table table-small table-striped table-hover">
+                    <ng-container *ngFor="let column of colunasCategoria" matColumnDef="{{column.columnDef}}">
+                        <th mat-header-cell *matHeaderCellDef>{{ column.header }}</th>
+                        <td mat-cell *matCellDef="let row">{{ row[column.columnDef] }}</td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="colunasCategoriaDef"></tr>
+                    <tr mat-row *matRowDef="let row; columns: colunasCategoriaDef;"></tr>
+                </table>
+                <mat-paginator #categoriasPaginator [pageSizeOptions]="[10, 50]" showFirstLastButtons></mat-paginator>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</mat-dialog-content>

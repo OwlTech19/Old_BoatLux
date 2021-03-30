@@ -1,0 +1,79 @@
+<h1 mat-dialog-title>
+    {{titulo}}
+    <button type="button" mat-icon-button (click)="dialogRef.close()" style="float:right;">
+        <mat-icon>close</mat-icon>
+    </button>
+</h1>
+<mat-dialog-content>
+    <form fxLayout="column" [formGroup]="buscaFormGroup" autocomplete="off">
+        <mat-card-content>
+            <div fxLayout="column">
+                <controles-busca-rapida #comprador tipo="comprador" required></controles-busca-rapida>
+            </div>
+            <div fxLayout="row" fxLayoutGap="20px" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                    <mat-select placeholder="Critério para avalição das cotações" formControlName="criterioAvaliacao">
+                        <mat-option value="1">Melhor preço/condição (Avalia diferença de ICMS)</mat-option>
+                        <mat-option value="2">Melhor preço (Não avalia diferença de ICMS)</mat-option>
+                        <mat-option value="3">Melhor condição de pagamento</mat-option>
+                        <mat-option value="4">Melhor prazo de entrega</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                    <mat-select placeholder="Forma de impressão" formControlName="formaImpressao">
+                        <mat-option value="1">Produtos</mat-option>
+                        <mat-option value="2">Fornecedores</mat-option>
+                        <mat-option value="4">Produtos não informados</mat-option>
+                        <mat-option value="5">Fornecedores vencedores</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row">
+                <mat-checkbox formControlName="chkPedidoDataCotacao"
+                    matTooltip="Gerar pedidos com a data em que a cotação foi realizada">Gerar pedido com a mesma data
+                    da cotação?</mat-checkbox>
+            </div>
+            <div fxLayout="column">
+                <mat-form-field class="textarea-full-width">
+                    <mat-label>Observações para o(s) pedido(s):</mat-label>
+                    <textarea matInput formControlName="observacaoPedido" maxlength="280"
+                        placeholder="Digite a observação para o(s) pedido(s)"></textarea>
+                </mat-form-field>
+            </div>
+        </mat-card-content>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <!-- Botão Voltar -->
+    <button type="button" mat-button (click)="Voltar()" class="grey-bg mr-8">
+        <mat-icon>arrow_back</mat-icon>
+        <span fxShow.xs="false">Voltar</span>
+    </button>
+    <!-- Botão Limpar -->
+    <button type="button" mat-raised-button color="accent" class="orange-bg  mr-8" (click)="limparBusca()">
+        <mat-icon>clear</mat-icon>
+        <span fxShow.xs="false">Limpar</span>
+    </button>
+    <!-- Botão Imprimir -->
+    <button type="button" mat-raised-button  color="accent" class="cyan-bg  mr-8" [matMenuTriggerFor]="menuImpressao">
+        <mat-icon>print</mat-icon>
+        <span fxShow.xs="false">Imprimir</span>
+    </button>
+    <mat-menu #menuImpressao="matMenu">
+        <button mat-menu-item (click)="imprimirBusca(1, true)">Visualizar</button>
+        <button mat-menu-item (click)="imprimirBusca(1, false)">Exportar PDF</button>
+        <button mat-menu-item (click)="imprimirBusca(2, false)">Exportar XLS</button>
+        <button mat-menu-item (click)="imprimirBusca(3, true)">Visualizar Fornecedores (Coluna)</button>
+    </mat-menu>
+    <!-- Botão Editar Cotações -->
+    <button type="button" mat-raised-button color="accent" class="blue-grey-500-bg mr-8" (click)="editarCotacao()">
+        <mat-icon>edit</mat-icon>
+        <span fxShow.xs="false">Editar cotações</span>
+    </button>
+    <!-- Botão Gerar Pedidos -->
+    <button type="button" mat-raised-button color="accent" class="green-bg mr-8" (click)="gerarPedidos()">
+        <mat-icon>save</mat-icon>
+        <span fxShow.xs="false">Gerar pedidos</span>
+    </button>
+</mat-dialog-actions>

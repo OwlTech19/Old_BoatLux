@@ -1,0 +1,38 @@
+<h1 mat-dialog-title>
+    Baixar Contas a Pagar - Títulos Selecionados
+    <button mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+</h1>
+<mat-dialog-content>
+    <form fxLayout="column" [formGroup]="baixaFormGroup" autocomplete="off">
+        <mat-card-content>
+            <controles-busca-rapida #conta tipo="conta"></controles-busca-rapida>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                    <input matInput ngxDaterangepickerMd placeholder="Data"
+                           formControlName="data"
+                           [autoApply]="false"
+                           [singleDatePicker]="true"
+                           [locale]="locale"
+                           type="text"
+                           readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                    <mat-label>Docto/Nota</mat-label>
+                    <input type="text" matInput formControlName="numDocto" placeholder="Nota">
+                </mat-form-field>
+            </div>
+            <controles-busca-rapida #operacaofinanceira tipo="operacaofinanceira"></controles-busca-rapida>
+            <controles-busca-rapida #formapg tipo="formapg"></controles-busca-rapida>
+        </mat-card-content>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button class="grey-300-bg" (click)="fecharJanela(false)">
+        <mat-icon>cancel</mat-icon>
+        <span fxShow.xs="false">Cancelar</span>
+    </button>
+    <button mat-raised-button type="button" color="accent" class="green-bg" (click)="baixarTitulos();">
+        <mat-icon>save</mat-icon>
+        <span fxShow.xs="false">Baixar Título</span>
+    </button>
+</mat-dialog-actions>

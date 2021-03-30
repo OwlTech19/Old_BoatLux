@@ -1,0 +1,90 @@
+<h1 mat-dialog-title>
+    Cadastro de Operação Bancária
+    <button mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+</h1>
+<mat-dialog-content>
+    <form fxLayout="column" [formGroup]="cadastroFormGroup" autocomplete="off">
+        <mat-card-content>
+            <div fxLayout="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                <fieldset fxFlex="100%" fxLayoutAlign="center center">
+                    <legend>
+                        Tipo da Operação Bancária
+                    </legend>
+                    <mat-radio-group formControlName="rbTipoOperacao" (change)="tipoOperacaoChanged()" fxLayoutGap="20px" fxLayout="row" fxLayout.lt-md="column">
+                        <mat-radio-button value="1">Movimentação</mat-radio-button>
+                        <mat-radio-button value="2">Transferência</mat-radio-button>
+                    </mat-radio-group>
+                </fieldset>
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                <controles-combo-loja #comboLoja (aoSelecionarLoja)="aoSelecionarLoja()" fxFlex="50%" fxFlex.gt-sm="100%"></controles-combo-loja>
+                <controles-busca-rapida #centrodecusto tipo="centrodecusto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                    <input matInput ngxDaterangepickerMd placeholder="Data"
+                           formControlName="data"
+                           [autoApply]="false"
+                           [singleDatePicker]="true"
+                           [locale]="locale"
+                           type="text"
+                           readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                    <mat-label>Valor da Operação</mat-label>
+                    <input matInput
+                           formControlName="valor"
+                           maxlength="16"
+                           currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                           placeholder="Digite o valor da operação. Exemplo: 200,00."
+                           min="1"
+                           oninput="validity.valid || (value=1);" />
+                </mat-form-field>
+            </div>
+            <div [hidden]="!exibeTransferencia">
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <fieldset fxFlex="50%" fxFlex.gt-sm="100%">
+                        <legend>
+                            Conta de Crédito
+                        </legend>
+                        <controles-busca-rapida #contacredito tipo="conta"></controles-busca-rapida>
+                    </fieldset>
+                    <fieldset fxFlex="50%" fxFlex.gt-sm="100%">
+                        <legend>
+                            Conta de Débito
+                        </legend>
+                        <controles-busca-rapida #contadebito tipo="conta"></controles-busca-rapida>
+                    </fieldset>
+                </div>
+            </div>
+            <div [hidden]="!exibeMovimentacao">
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <controles-busca-rapida #conta tipo="conta" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                    <mat-form-field class="pl-4" fxFlex="50%" fxFlex.gt-sm="100%">
+                        <mat-select placeholder="Tipo do Lançamento" formControlName="tipoLancto">
+                            <mat-option value="1">Crédito</mat-option>
+                            <mat-option value="2">Débito</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <mat-checkbox class="example-margin" formControlName="chkRefEmprestimo">Referente a empréstimo</mat-checkbox>
+            </div>
+            <div fxLayout="column">
+                <mat-form-field class="textarea-full-width">
+                    <mat-label>Histórico</mat-label>
+                    <textarea matInput formControlName="historico" maxlength="60" placeholder="Digite o histórico da operação bancária."></textarea>
+                </mat-form-field>
+            </div>
+        </mat-card-content>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button class="grey-300-bg" (click)="fecharJanela()">
+        <mat-icon>cancel</mat-icon>
+        <span fxShow.xs="false">Cancelar</span>
+    </button>
+    <button mat-raised-button color="accent" class="green-bg" (click)="salvarOperacao();">
+        <mat-icon>save</mat-icon>
+        <span fxShow.xs="false">Salvar Operação</span>
+    </button>
+</mat-dialog-actions>

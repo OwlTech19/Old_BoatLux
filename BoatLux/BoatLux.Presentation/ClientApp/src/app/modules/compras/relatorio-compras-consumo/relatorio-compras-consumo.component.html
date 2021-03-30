@@ -1,0 +1,93 @@
+<div class="pagina-padrao">
+    <form [formGroup]="filtrosFormGroup" autocomplete="off">
+        <div class="page-layout simple fullwidth">
+
+            <!-- HEADER -->
+            <titulo-pagina #tituloPagina titulo="Módulo Compras" subTitulo="Relatório de Compras/Consumo"></titulo-pagina>
+            <!-- / HEADER -->
+            <!-- CONTENT -->
+            <div class="content p-20">
+                <mat-card class="mat-elevation-z3">
+                    <mat-card-content>
+                        <mat-card class="search-filter-card">
+                            <mat-card-content>
+                                <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                    <controles-combo-loja #comboloja multiLoja="true" titulo="Lojas" fxFlex></controles-combo-loja>
+                                </div>
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                    <mat-form-field fxFlex="50%">
+                                        <input matInput ngxDaterangepickerMd placeholder="Primeiro período" formControlName="primeiroPeriodo" 
+                                               [autoApply]="false" 
+                                               [alwaysShowCalendars]="true" 
+                                               [ranges]="ranges" 
+                                               type="text" 
+                                               readonly>
+                                    </mat-form-field>
+                                    <mat-form-field fxFlex="50%">
+                                        <input matInput ngxDaterangepickerMd placeholder="Segundo período" formControlName="segundoPeriodo" 
+                                               [autoApply]="false" 
+                                               [showClearButton]="true" 
+                                               [alwaysShowCalendars]="true" 
+                                               [ranges]="ranges" 
+                                               type="text" 
+                                               readonly>
+                                    </mat-form-field>
+                                    <mat-form-field fxFlex="50%">
+                                        <input matInput ngxDaterangepickerMd placeholder="Terceiro período" formControlName="terceiroPeriodo" 
+                                               [autoApply]="false" 
+                                               [showClearButton]="true"
+                                               [alwaysShowCalendars]="true" 
+                                               [ranges]="ranges" 
+                                               type="text" 
+                                               readonly>
+                                    </mat-form-field>
+                                </div>
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                    <controles-busca-rapida #centroreceitaproduto tipo="centroreceitaproduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                    <controles-busca-rapida #grupoproduto tipo="grupoproduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                </div>
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                    <controles-busca-rapida #categoriaproduto tipo="categoriaproduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                    <controles-busca-rapida #familiaproduto tipo="familiaproduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                </div>
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                    <controles-busca-rapida #fornecedor tipo="fornecedor" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                    <controles-busca-rapida #produto tipo="produto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                </div>
+                                <div>
+                                    <mat-checkbox fxLayout="row" formControlName="chkVerZerado">Verificar produtos com estoque zerado</mat-checkbox>
+                                    <mat-checkbox fxLayout="row" formControlName="chkVerMin">Verificar apenas produtos com estoque inferior e igual ao mínimo do cadastro</mat-checkbox>
+                                </div>
+                                <div>
+                                    <fieldset fxFlex="50%" fxFlex.gt-sm="50%">
+                                        <legend>Ordenar por</legend>
+                                        <mat-radio-group formControlName="rbOrdenacao" fxLayoutAlign="center center" fxLayoutGap="20px">
+                                            <mat-radio-button value="1">Descrição</mat-radio-button>
+                                            <mat-radio-button value="2">Barra</mat-radio-button>
+                                        </mat-radio-group>
+                                    </fieldset>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </mat-card-content>
+                    <mat-card-actions fxLayoutAlign="center center">
+                        <button mat-raised-button type="button" color="accent" class="orange-bg" (click)="definirDadosPadraofiltrosFormGroup()">
+                            <mat-icon>clear</mat-icon>
+                            <span fxShow.xs="false">Limpar</span>
+                        </button>
+                        <button mat-raised-button type="button" color="accent" class="cyan-bg" [matMenuTriggerFor]="menuImpressao" [disabled]="!filtrosFormGroup.valid">
+                            <mat-icon>print</mat-icon>
+                            <span fxShow.xs="false">Imprimir</span>
+                        </button>
+                        <mat-menu #menuImpressao="matMenu">
+                            <button mat-menu-item (click)="imprimirBusca(1, true)">Visualizar</button>
+                            <button mat-menu-item (click)="imprimirBusca(1, false)">Exportar PDF</button>
+                            <button mat-menu-item (click)="imprimirBusca(2, false)">Exportar XLS</button>
+                        </mat-menu>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+            <!-- / CONTENT -->
+        </div>
+    </form>
+</div>

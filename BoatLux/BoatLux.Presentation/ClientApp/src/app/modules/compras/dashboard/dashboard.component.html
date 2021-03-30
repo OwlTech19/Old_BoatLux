@@ -1,0 +1,407 @@
+<div id="dashboard" class="page-layout blank">
+
+    <!-- HEADER -->
+    <titulo-pagina titulo="Módulo Compras" subTitulo="Dashboard"></titulo-pagina>
+    <!-- / HEADER -->
+
+    <div class="main-widget" *ngIf="grafico1 != null">
+
+        <div class="position-relative p-24 blue-600"
+             fxLayout="row" fxLayoutAlign="space-between center">
+            <div fxLayout="column" fxLayoutAlign="start start">
+                <span class="h2">Volume de compras</span>
+                <span class="h5 secondary-text">Em reais, por mês</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <div class="py-8 px-12 border-radius-2 line-height-1 mr-8 cursor-pointer" *ngFor="let item of grafico1.ranges"
+                     (click)="grafico1.selected = item"
+                     [ngClass]="{'blue-700': grafico1.selected === item}">
+                    {{item}}
+                </div>                
+            </div>
+        </div>
+
+        <div class="position-relative h-256 pb-16 blue-600">
+            <canvas baseChart
+                    [datasets]="grafico1.datasets[grafico1.selected]"
+                    [labels]="grafico1.labels"
+                    [colors]="grafico1.colors"
+                    [options]="grafico1.options"
+                    [chartType]="grafico1.chartType">
+            </canvas>
+        </div>
+
+    </div>
+
+    <div class="content">
+
+        <div class="left mr-lg-32">
+
+            <!--<div class="pb-24 font-size-18 font-weight-300">
+                Suas estatísticas de compras gerais
+            </div>-->
+
+            <div fxLayout="column" fxLayoutAlign="start"
+                 fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start start">
+
+                <!-- Widget 2 -->
+                <div class="widget" fxFlex="100" fxFlex.gt-sm="33">
+
+                    <!--<div class="fuse-card auto-width mb-32" [ngClass.gt-sm]="'mb-0 mr-32'">
+
+                        <div class="p-16 pb-0" fxLayout="row wrap" fxLayoutAlign="start end">
+
+                            <div class="pr-16">
+                                <div class="h3 secondary-text">Novas compras</div>
+                                <div class="font-size-54 font-weight-300 line-height-1 mt-8">
+                                    {{widgets.widget2.conversion.value}}
+                                </div>
+                            </div>
+
+                            <div class="py-4 font-size-16" fxLayout="row" fxLayoutAlign="start center">
+                                <div fxFlex="row" fxLayoutAlign="start center" class="green-fg"
+                                     *ngIf="widgets.widget2.conversion.ofTarget > 0">
+                                    <mat-icon class="green-fg mr-4">trending_up</mat-icon>
+                                    <span>{{widgets.widget2.conversion.ofTarget}}%</span>
+                                </div>
+                                <div fxFlex="row" fxLayoutAlign="start center" class="red-fg"
+                                     *ngIf="widgets.widget2.conversion.ofTarget < 0">
+                                    <mat-icon class="red-fg mr-4">trending_down</mat-icon>
+                                    <span>{{widgets.widget2.conversion.ofTarget}}%</span>
+                                </div>
+                                <div class="ml-4 text-nowrap">de taxa</div>
+                            </div>
+
+                        </div>
+
+                        <div class="h-96 w-100-p">
+                            <canvas baseChart
+                                    [datasets]="widgets.widget2.datasets"
+                                    [labels]="widgets.widget2.labels"
+                                    [colors]="widgets.widget2.colors"
+                                    [options]="widgets.widget2.options"
+                                    [chartType]="widgets.widget2.chartType">
+                            </canvas>
+                        </div>
+
+                    </div>-->
+
+                </div>
+                <!-- / Widget 2 -->
+                <!-- Widget 3 -->
+                <div class="widget" fxFlex="100" fxFlex.gt-sm="34">
+
+                    <!--<div class="fuse-card auto-width mb-32" [ngClass.gt-sm]="'mb-0 mr-32'">
+
+                        <div class="p-16 pb-0" fxLayout="row wrap" fxLayoutAlign="start end">
+
+                            <div class="pr-16">
+                                <div class="h3 secondary-text">Recompras</div>
+                                <div class="font-size-54 font-weight-300 line-height-1 mt-8">
+                                    {{widgets.widget3.impressions.value}}
+                                </div>
+                            </div>
+
+                            <div class="py-4 font-size-16" fxLayout="row" fxLayoutAlign="start center">
+                                <div fxFlex="row" fxLayoutAlign="start center" class="green-fg"
+                                     *ngIf="widgets.widget3.impressions.ofTarget > 0">
+                                    <mat-icon class="green-fg mr-4">trending_up</mat-icon>
+                                    <span>{{widgets.widget3.impressions.ofTarget}}%</span>
+                                </div>
+                                <div fxFlex="row" fxLayoutAlign="start center" class="red-fg"
+                                     *ngIf="widgets.widget3.impressions.ofTarget < 0">
+                                    <mat-icon class="red-fg mr-4">trending_down</mat-icon>
+                                    <span>{{widgets.widget3.impressions.ofTarget}}%</span>
+                                </div>
+                                <div class="ml-4 text-nowrap">de taxa</div>
+                            </div>
+
+                        </div>
+
+                        <div class="h-96 w-100-p">
+                            <canvas baseChart
+                                    [datasets]="widgets.widget3.datasets"
+                                    [labels]="widgets.widget3.labels"
+                                    [colors]="widgets.widget3.colors"
+                                    [options]="widgets.widget3.options"
+                                    [chartType]="widgets.widget3.chartType">
+                            </canvas>
+                        </div>
+
+                    </div>-->
+
+                </div>
+                <!-- / Widget 3 -->
+                <!-- Widget 4 -->
+                <div class="widget" fxFlex="100" fxFlex.gt-sm="33">
+
+                    <!--<div class="fuse-card auto-width">
+
+                        <div class="p-16 pb-0" fxLayout="row wrap" fxLayoutAlign="start end">
+
+                            <div class="pr-16">
+                                <div class="h3 secondary-text">Produtos perdidos</div>
+                                <div class="font-size-54 font-weight-300 line-height-1 mt-8">
+                                    {{widgets.widget4.visits.value}}
+                                </div>
+                            </div>
+
+                            <div class="py-4 font-size-16" fxLayout="row" fxLayoutAlign="start center">
+                                <div fxFlex="row" fxLayoutAlign="start center" class="green-fg"
+                                     *ngIf="widgets.widget4.visits.ofTarget > 0">
+                                    <mat-icon class="green-fg mr-4">trending_up</mat-icon>
+                                    <span>{{widgets.widget4.visits.ofTarget}}%</span>
+                                </div>
+                                <div fxFlex="row" fxLayoutAlign="start center" class="red-fg"
+                                     *ngIf="widgets.widget4.visits.ofTarget < 0">
+                                    <mat-icon class="red-fg mr-4">trending_down</mat-icon>
+                                    <span>{{widgets.widget4.visits.ofTarget}}%</span>
+                                </div>
+                                <div class="ml-4 text-nowrap">de taxa</div>
+                            </div>
+
+                        </div>
+
+                        <div class="h-96 w-100-p">
+                            <canvas baseChart
+                                    [datasets]="widgets.widget4.datasets"
+                                    [labels]="widgets.widget4.labels"
+                                    [colors]="widgets.widget4.colors"
+                                    [options]="widgets.widget4.options"
+                                    [chartType]="widgets.widget4.chartType">
+                            </canvas>
+                        </div>
+
+                    </div>-->
+
+                </div>
+                <!-- / Widget 4 -->
+
+            </div>
+
+            <!-- Widget 5 -->
+            <!--<div class="pt-48 pb-24 font-size-18 font-weight-300">
+                Compras por horário
+            </div>
+
+            <div class="fuse-card auto-width">
+
+                <div class="position-relative p-24"
+                     fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxLayout="column" fxLayoutAlign="start start">
+                        <span class="h2">Visitors & Page views</span>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="start center">
+                        <div class="py-8 px-12 border-radius-2 line-height-1 mr-8 cursor-pointer"
+                             (click)="widget5SelectedDay = 'yesterday'"
+                             [ngClass]="{'accent': widget5SelectedDay === 'yesterday'}">
+                            Ontem
+                        </div>
+                        <div class="py-8 px-12 border-radius-2 line-height-1 mr-8 cursor-pointer"
+                             (click)="widget5SelectedDay = 'today'"
+                             [ngClass]="{'accent': widget5SelectedDay === 'today'}">
+                            Hoje
+                        </div>
+                    </div>
+                </div>
+
+                <div class="position-relative h-368 pb-16">
+                    <canvas baseChart
+                            [datasets]="widgets.widget5.datasets[widget5SelectedDay]"
+                            [labels]="widgets.widget5.labels"
+                            [colors]="widgets.widget5.colors"
+                            [options]="widgets.widget5.options"
+                            [chartType]="widgets.widget5.chartType">
+                    </canvas>
+                </div>
+
+            </div>-->
+            <!-- / Widget 5 -->
+
+
+
+
+        </div>
+
+        <div class="right">
+
+            <div fxLayout="row wrap" fxLayout.gt-md="column">
+
+                <!-- Widget 7 -->
+                <!--<div class="mb-48" [ngClass.lt-lg]="'mr-32'" [ngClass.xs]="'mr-0'">
+
+                    <div class="pb-24 font-size-18 font-weight-300">
+                        Fluxo de compras
+                    </div>
+
+                    <div class="fuse-card">
+
+                        <div class="p-16">
+                            <div class="h1 font-weight-300">Compras por dispositivo</div>
+                        </div>
+
+                        <div class="h-200">
+                            <ngx-charts-pie-chart *fuseIfOnDom
+                                                  [scheme]="widgets.widget7.scheme"
+                                                  [results]="widgets.widget7.devices"
+                                                  [doughnut]="true">
+                            </ngx-charts-pie-chart>
+                        </div>
+
+                        <div class="p-16" fxLayout="row" fxLayoutAlign="center center">
+
+                            <div class="px-16" fxLayout="column" fxLayoutAlign="start center"
+                                 *ngFor="let device of widgets.widget7.devices">
+
+                                <div class="h4 secondary-text">{{device.name}}</div>
+                                <div class="h2 font-weight-300 py-8">{{device.value}}%</div>
+
+                                <div fxLayout="row" fxLayoutAlign="center center">
+                                    <mat-icon class="s-18 pr-4 red-fg"
+                                              *ngIf="device.change < 0">
+                                        arrow_downward
+                                    </mat-icon>
+
+                                    <mat-icon class="s-18 pr-4 green-fg"
+                                              *ngIf="device.change > 0">
+                                        arrow_upward
+                                    </mat-icon>
+
+                                    <div class="h5 red-fg"
+                                         [ngClass]="{'red-fg': device.change < 0, 'green-fg': device.change > 0}">
+                                        {{device.change}}%
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="card-divider mb-0"></div>
+
+                        <div class="px-16" fxLayout="row" fxLayoutAlign="space-between center">
+                            <mat-form-field>
+                                <mat-select class="simplified" value="7days">
+                                    <mat-option value="today">Hoje</mat-option>
+                                    <mat-option value="yesterday">Ontem</mat-option>
+                                    <mat-option value="7days">Últimos 7 dias</mat-option>
+                                    <mat-option value="28days">Últimos 28 dias</mat-option>
+                                    <mat-option value="90days">Últimos 90 dias</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <button mat-button color="accent">OVERVIEW</button>
+                        </div>
+
+                    </div>
+
+                </div>-->
+                <!-- / Widget 7 -->
+                <!-- Widget 8 -->
+                <!--<div class="mb-48" [ngClass.lt-lg]="'mr-32'" [ngClass.xs]="'mr-0'">
+
+                    <div class="pb-24 font-size-18 font-weight-300">
+                        Fluxo de recompras
+                    </div>
+
+                    <div class="fuse-card">
+
+                        <div class="light-blue-600">
+
+                            <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center">
+                                <div class="pr-16">
+                                    <div class="h1 font-weight-300">Recompras</div>
+                                    <div class="h5 secondary-text">Ciclo das recompras</div>
+                                </div>
+
+                                <div>
+                                    <button mat-icon-button [matMenuTriggerFor]="card19Menu" aria-label="more">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </button>
+
+                                    <mat-menu #card19Menu="matMenu">
+                                        <button mat-menu-item>
+                                            <mat-icon>trending_up</mat-icon>
+                                            <span>Trend</span>
+                                        </button>
+                                        <button mat-menu-item>
+                                            <mat-icon>history</mat-icon>
+                                            <span>History</span>
+                                        </button>
+                                        <button mat-menu-item>
+                                            <mat-icon>notifications_off</mat-icon>
+                                            <span>Disable alerts</span>
+                                        </button>
+                                    </mat-menu>
+                                </div>
+                            </div>
+
+                            <div class="p-16 pt-8" fxLayout="row" fxLayoutAlign="space-between end">
+                                <div class="font-size-48 font-weight-300 line-height-1">{{widgets.widget8.today}}</div>
+                                <div fxLayout="row" fxLayoutAlign="start center">
+                                    <mat-icon *ngIf="widgets.widget8.change.value > 0">trending_up</mat-icon>
+                                    <mat-icon *ngIf="widgets.widget8.change.value < 0">trending_down</mat-icon>
+                                    <div class="ml-8">
+                                        {{widgets.widget8.change.value}}
+                                        ({{widgets.widget8.change.percentage}}%)
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <mat-tab-group backgroundColor="accent">
+                            <mat-tab label="1 dia">
+                                <div class="h-200 my-16">
+                                    <ngx-charts-line-chart *fuseIfOnDom
+                                                           [scheme]="widgets.widget8.scheme"
+                                                           [results]="widgets.widget8.data"
+                                                           [xAxis]="false"
+                                                           [yAxis]="true"
+                                                           [yScaleMin]="widgets.widget8.dataMin"
+                                                           [yScaleMax]="widgets.widget8.dataMax">
+                                    </ngx-charts-line-chart>
+                                </div>
+                            </mat-tab>
+
+                            <mat-tab label="1 semana">
+                                <div class="h-200 my-16">
+                                    <ngx-charts-line-chart *fuseIfOnDom
+                                                           [scheme]="widgets.widget8.scheme"
+                                                           [results]="widgets.widget8.data"
+                                                           [xAxis]="false"
+                                                           [yAxis]="true"
+                                                           [yScaleMin]="widgets.widget8.dataMin"
+                                                           [yScaleMax]="widgets.widget8.dataMax">
+                                    </ngx-charts-line-chart>
+                                </div>
+                            </mat-tab>
+
+                            <mat-tab label="1 mês">
+                                <div class="h-200 my-16">
+                                    <ngx-charts-line-chart *fuseIfOnDom
+                                                           [scheme]="widgets.widget8.scheme"
+                                                           [results]="widgets.widget8.data"
+                                                           [xAxis]="false"
+                                                           [yAxis]="true"
+                                                           [yScaleMin]="widgets.widget8.dataMin"
+                                                           [yScaleMax]="widgets.widget8.dataMax">
+                                    </ngx-charts-line-chart>
+                                </div>
+                            </mat-tab>
+                        </mat-tab-group>
+
+                    </div>
+
+                </div>-->
+
+                <!-- / Widget 8 -->
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>
+    Cadastro de Custo
+</h1>
+<mat-dialog-content>
+    <form fxLayout="column" [formGroup]="registerFormGroup" autocomplete="off">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="70%" fxFlex.gt-sm="100%">
+                <mat-label>Custo</mat-label>
+                <input matInput formControlName="costDescription" maxlength="45" placeholder="Digite a descrição do custo">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="30%" fxFlex.gt-sm="100%">
+                <mat-label>Tipo do custo</mat-label>
+                <mat-select formControlName="costType">
+                    <mat-option value="1">Custo fixo da embarcação</mat-option>
+                    <mat-option value="2">Custo variável da embarcação</mat-option>
+                    <mat-option value="3">Custo fixo da cota</mat-option>
+                    <mat-option value="4">Custo variável da cota</mat-option>
+                    <mat-option value="5">Desconto</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="closeWindow(false)">Fechar</button>
+    <button mat-raised-button color="accent" class="deep-purple-300-bg" [mat-dialog-close]="data" (click)="addCost();">Adicionar custo</button>
+</mat-dialog-actions>

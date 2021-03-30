@@ -1,0 +1,52 @@
+<form autocomplete="off" [formGroup]="cadastroFormGroup">
+    <h1 mat-dialog-title>
+        {{titulo}}
+        <button type="button" mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+    </h1>
+    <mat-dialog-content>
+        <div fxflex>
+            <div fxLayout.lt-md="column" style="pointer-events:none">
+                <controles-busca-rapida #fornecedor tipo="fornecedor"></controles-busca-rapida>
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="50%">
+                    <mat-label>Data</mat-label>
+                    <input matInput ngxDaterangepickerMd placeholder="Informe a data" formControlName="data"
+                           [autoApply]="false"
+                           [singleDatePicker]="true"
+                           [locale]="locale"    
+                           type="text" readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Valor</mat-label>
+                    <input matInput formControlName="valor" maxlength="9" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2 }" placeholder="Digite o valor. Exemplo: 200,00." />
+                </mat-form-field>
+            </div>
+            <div fxLayout="column">
+                <mat-form-field fxFlex>
+                    <mat-label>Descrição</mat-label>
+                    <textarea matInput placeholder="Digite a descrição da pendência" formControlName="descricao" maxlength="500"></textarea>
+                </mat-form-field>
+            </div>
+            <div fxLayout="column">
+                <mat-form-field>
+                    <mat-select placeholder="Situação" formControlName="situacao">
+                        <mat-option value="AB">Aberta</mat-option>
+                        <mat-option value="CA">Cancelada</mat-option>
+                        <mat-option value="F">Finalizada</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <mat-card-actions fxLayoutAlign="end">
+            <button type="button" mat-raised-button class="grey-300-bg" (click)="dialogRef.close()">
+                <mat-icon>cancel</mat-icon>
+                Cancelar
+            </button>
+            <button type="button" mat-raised-button color="accent" class="green-bg" (click)="salvarPendencia()">
+                <mat-icon>check</mat-icon>
+                Salvar
+            </button>
+        </mat-card-actions>
+    </mat-dialog-content>
+</form>

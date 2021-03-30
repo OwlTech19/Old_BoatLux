@@ -1,0 +1,117 @@
+<form fxLayout="column" autocomplete="off">
+    <h1 mat-dialog-title>
+        {{titulo}}
+        <button type="button" mat-icon-button (click)="dialogRef.close()" style="float:right;">
+            <mat-icon>close</mat-icon>
+        </button>
+    </h1>
+    <mat-dialog-content>
+
+        <!-- TAB GROUP -->
+        <mat-tab-group>
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <mat-icon class="mr-8">group</mat-icon>
+                    Fornecedores
+                </ng-template>
+                <br />
+                <mat-card class="search-filter-card">
+                    <mat-card-content>
+                        <div fxLayout="row">
+                            <mat-form-field fxFlex="100">
+                                <mat-label>Filtre os fornecedores desta cotação</mat-label>
+                                <input matInput type="text" placeholder="Filtre os fornecedores pelo ID ou razão"
+                                       [(ngModel)]="filtroDescricaoFornecedores" [ngModelOptions]="{standalone: true}"
+                                       (keyup)="aplicarFiltroFornecedores()">
+                            </mat-form-field>
+                        </div>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button mat-raised-button color="accent" class="blue-bg" (click)="adicionarFornecedores()"
+                                type="button">
+                            <mat-icon>playlist_add</mat-icon>
+                            Adicionar fornecedores
+                        </button>
+                    </mat-card-actions>
+                </mat-card>
+                <div *ngIf="!temItens" class="alert alert-warning mt-20" role="alert">
+                    <mat-icon>warning</mat-icon>
+                    Clique em Adicionar Fornecedores para incluir os fornecedores da cotação!
+                </div>
+                <mat-card>
+                    <table [hidden]="!temItens" mat-table class="table table-small table-hover" [dataSource]="fornecedoresDataSource"
+                           matSort>
+                        <ng-container matColumnDef="fornecedorId">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                            <td mat-cell *matCellDef="let item">{{item.fornecedorId}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="razao">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Razão social</th>
+                            <td mat-cell *matCellDef="let item">{{item.razao}}</td>
+                            <td mat-footer-cell *matFooterCellDef></td>
+                        </ng-container>
+                        <ng-container matColumnDef="email">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>E-mail</th>
+                            <td mat-cell *matCellDef="let item">{{item.email}}</td>
+                            <td mat-footer-cell *matFooterCellDef></td>
+                        </ng-container>
+                        <ng-container matColumnDef="celular">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Celular</th>
+                            <td mat-cell *matCellDef="let item">{{item.celular}}</td>
+                            <td mat-footer-cell *matFooterCellDef></td>
+                        </ng-container>
+                        <ng-container matColumnDef="acoes">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: right !important;">Ações</th>
+                            <td mat-cell *matCellDef="let item;" style="text-align: right;">
+                                <button type="button" mat-icon-button aria-label="Excluir" class="red-fg"
+                                        (click)="removerFornecedor(item)" matTooltip="Excluir">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row style="white-space: nowrap;" *matHeaderRowDef="colunasItens;"></tr>
+                        <tr mat-row style="white-space: nowrap;" *matRowDef="let row; columns: colunasItens"></tr>
+                    </table>
+
+                    <mat-paginator [pageSizeOptions]="[10, 50]" showFirstLastButtons></mat-paginator>
+                    <br />
+                </mat-card>
+
+            </mat-tab>
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <mat-icon class="mr-8">today</mat-icon>
+                    Prazo
+                </ng-template>
+                <br />
+                    <form [formGroup]="prazoFormGroup" style="width:100%" autocomplete="off" fxLayout="row"
+                          fxLayoutGap="10px" fxLayout.lt-md="column">
+                        <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                            <input matInput ngxDaterangepickerMd formControlName="validadeCotacao"
+                                   placeholder="Informe a data e hora de validade" [autoApply]="false" [locale]="locale"
+                                   [minDate]="minDate" [singleDatePicker]="true" [timePicker]="true" [timePickerIncrement]="15"
+                                   [timePicker24Hour]="true" readonly>
+                        </mat-form-field>
+                        <fieldset fxFlex="50%" fxFlex.gt-sm="100%">
+                            <legend>Opções de envio da cotação</legend>
+                            <mat-checkbox formControlName="verCustoRef"
+                                          matTooltip="Ao marcar esta opção, o fornecedor visualizará o custo atual como referência na cotação">
+                                Enviar o custo do produto como referência
+                            </mat-checkbox>
+                        </fieldset>
+                    </form>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button type="button" class="grey-300-bg mr-8" mat-button (click)="dialogRef.close()">
+            <mat-icon>cancel</mat-icon>
+            Cancelar
+        </button>
+        <button type="button" mat-raised-button color="accent" class="green-bg" (click)="liberarCotacao()">
+            <mat-icon>lock_open</mat-icon>
+            Liberar para Web
+        </button>
+    </mat-dialog-actions>
+</form>

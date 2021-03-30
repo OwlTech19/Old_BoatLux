@@ -1,0 +1,85 @@
+<h1 mat-dialog-title>
+    Extrato Bancário
+    <button mat-icon-button (click)="dialogRef.close()" style="float:right;">
+        <mat-icon>close</mat-icon>
+    </button>
+</h1>
+<mat-dialog-content>
+    <form fxLayout="column" [formGroup]="filtrosFormGroup" autocomplete="off">
+        <mat-card-content>
+            <div fxLayout="column">
+                <controles-combo-loja #comboLoja multiLoja="true" (aoSelecionarLoja)="aoSelecionarLoja()"></controles-combo-loja>
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="33%" class="pl-4">
+                    <mat-select placeholder="Filtrar data" formControlName="tipoData">
+                        <mat-option value="1">Data de movimentação</mat-option>
+                        <mat-option value="2">Data de conciliação</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <input matInput ngxDaterangepickerMd
+                           placeholder="Período"
+                           formControlName="periodo"
+                           [autoApply]="false"
+                           [alwaysShowCalendars]="true"
+                           [ranges]="ranges"
+                           [showClearButton]="true"
+                           type="text"
+                           readonly>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                <controles-busca-rapida #conta tipo="conta" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                    <mat-label>Saldo inicial</mat-label>
+                    <input matInput formControlName="saldoInicial"
+                           currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: true, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                           placeholder="Saldo inicial. Exemplo: 200,00." />
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                <mat-form-field fxFlex="33%" fxFlex.gt-sm="100%">
+                    <mat-select placeholder="Tipo de dados" formControlName="tipoDados">
+                        <mat-option value="1">Analítico</mat-option>
+                        <mat-option value="2">Sintético</mat-option>
+                        <mat-option value="3">Resumido</mat-option>
+                        <mat-option value="4">Apenas receber</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="33%" fxFlex.gt-sm="100%">
+                    <mat-select placeholder="Lançamentos" formControlName="lancamentos" fxFlex="50%" fxFlex.gt-sm="100%">
+                        <mat-option value="">Todos</mat-option>
+                        <mat-option value="1">Não conciliados</mat-option>
+                        <mat-option value="2">Conciliados</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="33%" fxFlex.gt-sm="100%">
+                    <mat-select placeholder="Ordem para impressão" formControlName="ordemImpressao" fxFlex="50%" fxFlex.gt-sm="100%">
+                        <mat-option value="1">Histórico</mat-option>
+                        <mat-option value="2">Documento</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </mat-card-content>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-raised-button type="button" class="grey-300-bg" (click)="fecharJanela()">
+        <mat-icon>close</mat-icon>
+        <span fxShow.xs="false">Fechar</span>
+    </button>
+    <button mat-raised-button type="button" color="accent" class="orange-bg" (click)="definirDadosDefault()">
+        <mat-icon>clear</mat-icon>
+        <span fxShow.xs="false">Limpar</span>
+    </button>
+    <button mat-raised-button type="button" color="accent" class="cyan-bg" [matMenuTriggerFor]="menuImpressao">
+        <mat-icon>print</mat-icon>
+        <span fxShow.xs="false">Imprimir</span>
+    </button>
+    <mat-menu #menuImpressao="matMenu">
+        <button mat-menu-item (click)="imprimir(1, true)">Visualizar</button>
+        <button mat-menu-item (click)="imprimir(1, false)">Exportar PDF</button>
+        <button mat-menu-item (click)="imprimir(2, false)">Exportar XLS</button>
+    </mat-menu>
+</mat-dialog-actions>
