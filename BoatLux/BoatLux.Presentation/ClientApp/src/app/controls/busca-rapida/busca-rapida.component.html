@@ -1,0 +1,14 @@
+<div fxLayout="column">
+    <mat-form-field fxFlex>
+        <mat-label>{{label}}</mat-label>
+        <input [formControl]="buscaRapidaFormControl" type="text" [readonly]="buscaRapidaFormControl.value != null && buscaRapidaFormControl.value.id != null" placeholder="{{placeholder}}" aria-label="Number" matInput [matAutocomplete]="autoComplete" (blur)="tentarBuscarCodigo()" (dblclick)="limpar()">
+        <mat-autocomplete autoActiveFirstOption #autoComplete="matAutocomplete" [displayWith]="exibirTitulo" (optionSelected)="selecionarItemLista()">
+            <mat-option *ngFor="let item of resultadosEncontrados$ | async" [value]="item">
+                {{exibirTitulo(item)}}
+            </mat-option>
+        </mat-autocomplete>
+        <mat-icon role="img" class="mat-icon notranslate material-icons mat-icon-no-color" color="warn" aria-hidden="true" style="cursor: pointer; position: absolute; right: 0px; float:right;" *ngIf="buscaRapidaFormControl.value != null && buscaRapidaFormControl.value.id != null" (click)="buscaRapidaFormControl.setValue(null)">close</mat-icon>
+        <mat-icon *ngIf="nenhumItemEncontrado" role="img" class="mat-icon notranslate material-icons mat-icon-no-color" color="warn" aria-hidden="true" style="position: absolute; right: 0px; float:right;">warning</mat-icon>
+        <mat-progress-spinner *ngIf="estaCarregando" color="accent" mode="indeterminate" diameter="20" style="position: absolute; right: 0px; top: 7px; float:right;"></mat-progress-spinner>
+    </mat-form-field>
+</div>

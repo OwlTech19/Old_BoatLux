@@ -1,0 +1,74 @@
+<div class="pagina-padrao">
+    <form [formGroup]="filtrosFormGroup" autocomplete="off">
+        <div class="page-layout simple fullwidth">
+
+            <!-- HEADER -->
+            <titulo-pagina #tituloPagina titulo="Módulo Compras" subTitulo="Relatório de Compras/Período"></titulo-pagina>
+            <!-- / HEADER -->
+            <!-- CONTENT -->
+            <div class="content p-20">
+                <mat-card class="mat-elevation-z3">
+                    <mat-card-content>
+                        <mat-card class="search-filter-card">
+                            <mat-card-content>
+                                <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                                    <controles-combo-loja #comboloja multiLoja="true" titulo="Lojas" fxFlex required (aoSelecionarLoja)="aoSelecionarLoja()"></controles-combo-loja>
+                                </div>
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                                    <mat-form-field fxFlex="50%">
+                                        <input matInput ngxDaterangepickerMd placeholder="Período" formControlName="periodo" [autoApply]="false" [showClearButton]="true" [alwaysShowCalendars]="true" [ranges]="ranges" type="text" readonly required>
+                                    </mat-form-field>
+                                    <controles-busca-rapida #fornecedor tipo="fornecedor" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                </div>
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                                    <controles-busca-rapida #comprador tipo="comprador" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                    <controles-busca-rapida #produto tipo="produto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                </div>
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                                    <controles-busca-rapida #centroreceitaproduto tipo="centroreceitaproduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                    <controles-busca-rapida #grupoproduto tipo="grupoproduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                </div>
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                                    <controles-busca-rapida #categoriaproduto tipo="categoriaproduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                    <controles-busca-rapida #familiaproduto tipo="familiaproduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                </div>
+                                <div>
+                                    <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                                        <mat-select placeholder="Tipo" formControlName="tipo">
+                                            <mat-option value="1">Todos</mat-option>
+                                            <mat-option value="2">Abertos</mat-option>
+                                            <mat-option value="3">Baixados</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                                        <mat-select placeholder="Quebra por" formControlName="quebra">
+                                            <mat-option value="1">Fornecedor</mat-option>
+                                            <mat-option value="2">Produto</mat-option>
+                                            <mat-option value="3">Comprador</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </mat-card-content>
+                    <mat-card-actions fxLayoutAlign="center center">
+                        <button mat-raised-button type="button" color="accent" class="orange-bg" (click)="definirDadosPadraofiltrosFormGroup()">
+                            <mat-icon>clear</mat-icon>
+                            <span fxShow.xs="false">Limpar</span>
+                        </button>
+                        <button mat-raised-button type="button" color="accent" class="cyan-bg" [matMenuTriggerFor]="menuImpressao" [disabled]="!filtrosFormGroup.valid">
+                            <mat-icon>print</mat-icon>
+                            <span fxShow.xs="false">Imprimir</span>
+                        </button>
+                        <mat-menu #menuImpressao="matMenu">
+                            <button mat-menu-item (click)="imprimirBusca(1, true)">Visualizar</button>
+                            <button mat-menu-item (click)="imprimirBusca(1, false)">Exportar PDF</button>
+                            <button mat-menu-item (click)="imprimirBusca(2, false)">Exportar XLS</button>
+                        </mat-menu>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+            <!-- / CONTENT -->
+        </div>
+    </form>
+</div>

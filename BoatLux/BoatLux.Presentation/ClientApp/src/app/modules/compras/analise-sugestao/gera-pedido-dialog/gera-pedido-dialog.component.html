@@ -1,0 +1,45 @@
+<h1 mat-dialog-title>
+    Geração de pedido de compra
+    <button mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+</h1>
+<mat-dialog-content>
+    <form fxLayout="column" [formGroup]="geraPedidoFormGroup" autocomplete="off">
+        <div fxLayout="column">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex>
+                    <mat-label>Data do pedido</mat-label>
+                    <input matInput ngxDaterangepickerMd placeholder="Informe a data do pedido" formControlName="dataCompra"
+                           [autoApply]="false"
+                           [singleDatePicker]="true"
+                           [locale]="locale"
+                           type="text" readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Validade do pedido</mat-label>
+                    <input matInput ngxDaterangepickerMd placeholder="Informe a data de validade do pedido" formControlName="dataValidade"
+                           [autoApply]="false"
+                           [singleDatePicker]="true"
+                           [locale]="locale"
+                           [minDate]="minDate"
+                           type="text" readonly>
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="column">
+            <controles-busca-rapida #comprador tipo="comprador"></controles-busca-rapida>
+            <controles-busca-rapida #fornecedor tipo="fornecedor"></controles-busca-rapida>
+            <controles-busca-rapida #condPagto tipo="condPagto"></controles-busca-rapida>
+            <mat-form-field fxFlex>
+                <mat-label>Observações</mat-label>
+                <textarea rows="3" matInput placeholder="Digite as observações da compra" formControlName="observacoes" maxlength="1000"></textarea>
+            </mat-form-field>
+        </div>
+        <div fxLayout="column">
+            <mat-checkbox class="example-margin" formControlName="incluirSomenteEditados" matTooltip="O pedido será gerado apenas com itens editados e com quantidade a comprar">Incluir somente itens editados</mat-checkbox>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="dialogRef.close()">Cancelar</button>
+    <button mat-raised-button color="accent" cdkFocusInitial (click)="concluirGeracaoPedido()">Concluir</button>
+</mat-dialog-actions>

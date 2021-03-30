@@ -1,0 +1,479 @@
+// Import Fuse core library
+@import "@fuse/scss/core";
+
+// Import app.theme.scss
+@import "app/app.theme";
+
+.search-filter-card {
+    /*background-color: #f6f6f6 !important;*/
+    background: rgb(255,255,255) !important;
+    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(245,245,245,1) 100%) !important;
+    /*margin: -16px !important;*/
+    /*margin-bottom: 12px !important;*/
+    box-shadow: none !important;
+    /*border: solid 1px #e5e5e5;*/
+    border-radius: 5px !important;
+
+    .mat-card-content {
+        margin-bottom: 0 !important;
+    }
+
+    .mat-card-actions {
+        text-align: right !important;
+        padding-bottom: 8px !important;
+
+        .left-action-button {
+            float: left;
+            margin-left: 7px !important;
+        }
+    }
+
+    .mat-card-actions button {
+        margin: 0 !important;
+        margin-right: 7px !important
+    }
+    /*.mat-card-actions button mat-icon {
+        margin: 0 !important;
+        margin-right: 7px !important
+    }*/
+}
+
+
+
+//Ajusta o tamanho das janelas de aleta do SWAL
+.swal2-container {
+    zoom: 1.4;
+}
+
+//alert
+.alert {
+    min-width: 150px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+
+    &-success {
+        background-color: lighten(#5cb85c, 15%);
+        border-color: lighten(#5cb85c, 10%);
+        color: darken(#5cb85c, 15%);
+    }
+
+    &-warning {
+        background-color: lighten(#E2A41F, 15%);
+        border-color: lighten(#E2A41F, 10%);
+        color: darken(#E2A41F, 15%);
+    }
+
+    &-danger {
+        background-color: lighten(#d43f3a, 15%);
+        border-color: lighten(#d43f3a, 10%);
+        color: darken(#d43f3a, 15%);
+    }
+
+    p {
+        padding: 0;
+        margin: 0;
+    }
+
+    i {
+        padding-right: 5px;
+        vertical-align: middle;
+        font-size: 24px;
+    }
+
+    .close-alert {
+        -webkit-appearance: none;
+        position: relative;
+        float: right;
+        padding: 0;
+        border: 0;
+        cursor: pointer;
+        color: inherit;
+        background: 0 0;
+        font-size: 21px;
+        line-height: 1;
+        font-weight: bold;
+        text-shadow: 0 1px 0 rgba(255,255,255,.7);
+        filter: alpha(opacity=40);
+        opacity: .4;
+
+        &:hover {
+            filter: alpha(opacity=70);
+            opacity: .7;
+        }
+    }
+}
+
+.tabelaBuscaItens {
+    width: 100%;
+
+    .mat-header-cell {
+        color: #222;
+        padding: 0px 12px;
+    }
+
+    .mat-header-row {
+        height: 40px;
+    }
+
+    .mat-row {
+        height: 36px;
+    }
+
+    .mat-cell {
+        padding: 0px 12px;
+    }
+
+    .mat-footer-row {
+        height: 40px;
+    }
+
+    .mat-footer-cell {
+        color: #222;
+        padding: 0px 12px;
+    }
+
+    .mat-row:hover {
+        background-color: #eee;
+        transition: background-color 0.25s ease;
+    }
+
+    .mat-header-cell,
+    .mat-cell,
+    .mat-footer-cell {
+        font-size: 10pt;
+    }
+
+    .mat-footer-cell {
+        color: #888;
+        font-weight: bold;
+    }
+
+    .mat-icon-button {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+
+        .mat-icon {
+            font-size: 23px;
+            /*line-height: 30px;*/
+        }
+    }
+}
+
+.pagina-padrao {
+    width: 100%;
+    /*padding: 10px;*/
+}
+
+.table-scroller {
+    position: relative;
+    /*display: block;*/
+    overflow-x: visible;
+    overflow-y: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.table {
+    border-spacing: 0px !important;
+    width: 100% !important;
+    display: table;
+    /*display: none;*/
+    thead > tr {
+        border-bottom: solid 1px lightgray !important;
+    }
+
+    tbody > tr {
+    }
+    /*tbody > tr:nth-child(even) {
+        background-color: #f2f2f2 !important;
+    }*/
+    thead > tr > th,
+    .mat-header-cell,
+    .mat-footer-cell {
+        text-align: left;
+        color: #222 !important;
+        font-weight: bold;
+    }
+
+    thead > tr > th:first-of-type,
+    .mat-header-cell:first-of-type,
+    tbody > tr > td:first-of-type,
+    .mat-cell:first-of-type,
+    tfoot > tr > td:first-of-type,
+    .mat-footer-cell:first-of-type {
+        padding-left: 0px;
+        //white-space: nowrap;
+    }
+
+    thead > tr > th:last-of-type,
+    .mat-header-cell:last-of-type,
+    tbody > tr > td:last-of-type,
+    .mat-cell:last-of-type,
+    tfoot > tr > td:first-of-type,
+    .mat-footer-cell:first-of-type {
+        padding-right: 0px;
+        //white-space: nowrap;
+    }
+
+    thead > tr > th,
+    .mat-header-cell,
+    tbody > tr > td,
+    .mat-cell {
+        //padding: 0;
+        white-space: nowrap;
+    }
+
+    .mat-table-sticky:first-child {
+        border-right: 1px solid #e0e0e0;
+        padding-right: 10px;
+    }
+
+    .mat-table-sticky:last-child {
+        border-left: 1px solid #e0e0e0;
+        /*padding-left: 10px;*/
+    }
+}
+
+.table-small {
+
+    thead > tr,
+    tbody > tr,
+    tfoot > tr {
+        height: 28px !important;
+    }
+
+
+    thead > tr > th, .mat-header-cell, tbody > tr > td, .mat-cell, .mat-footer-cell {
+        padding: 5px;
+        padding-left: 10px;
+        font-size: 8pt !important;
+    }
+}
+
+.table-medium {
+
+    thead > tr,
+    tbody > tr,
+    tfoot > tr {
+        height: 36px;
+    }
+
+    thead > tr > th, .mat-header-cell, tbody > tr > td, .mat-cell, .mat-footer-cell {
+        padding: 0;
+        padding-left: 10px;
+        font-size: 10pt;
+    }
+
+    .mat-icon-button {
+        width: 25px;
+        height: 25px;
+        line-height: 20px;
+
+        .mat-icon {
+            font-size: 20px;
+            /*line-height: 30px;*/
+        }
+    }
+}
+
+.table-hover {
+
+    thead > tr {
+        height: 28px;
+    }
+
+    tbody > tr:hover {
+        background-color: #f1f1f1;
+    }
+}
+
+.table-striped {
+    tbody > tr:nth-child(even),
+    .mat-row:nth-child(even) {
+        background-color: #f5f5f5;
+    }
+}
+
+.table-pointer {
+    tbody > tr:hover {
+        cursor: pointer;
+    }
+}
+
+.table-bordered {
+    border-collapse: collapse;
+    border: 1px solid lightgray;
+
+    th, td {
+        border: 1px solid lightgray;
+    }
+}
+
+.table-column-right {
+    text-align: right;
+}
+
+.table-column-center {
+    text-align: center;
+}
+
+.mat-menu-panel {
+    min-height: 35px !important;
+    max-width: 300px !important;
+}
+
+.mat-menu-item {
+    line-height: 35px !important;
+    height: 35px !important;
+}
+
+body.theme-default .mat-cell, body.theme-default .mat-footer-cell {
+    color: inherit;
+}
+
+.mat-dialog-content {
+    /*height: 80% !important;
+    max-height: 80% !important;*/
+}
+
+.mat-button-toggle-group {
+    height: 40px;
+}
+
+
+.md-drppicker {
+    background-color: #e9e9e9;
+
+    .start-date {
+        background-color: grey;
+    }
+
+    .in-range {
+        background-color: #ddd;
+    }
+
+    .end-date {
+        background-color: grey;
+    }
+}
+
+.title {
+    text-align: center;
+    font-weight: bold;
+    font-family:Arial;
+}
+
+
+
+
+body.theme-default chat-panel #contacts-list {
+    background-color: #f5f5f5
+}
+
+body.theme-default chat-panel #contacts-list .contacts-list-item.active {
+    background: rgba(0,0,0,.04)
+}
+
+body.theme-default chat-panel #contacts-list .contacts-list-item.active:after {
+    background-color: #039be5
+}
+
+body.theme-default chat-panel #contacts-list .contacts-list-item .unread-count {
+    background-color: #039be5;
+    color: #fff
+}
+
+body.theme-default chat-panel #contacts-list .contacts-list-item .status-icon {
+    border-color: #f5f5f5
+}
+
+body.theme-default chat-panel #chat .messages .message-row.contact .bubble {
+    background-color: #3c4252;
+    color: #fff
+}
+
+body.theme-default chat-panel #chat .messages .message-row.me .bubble {
+    color: rgba(0,0,0,.87);
+    background-color: #e0e0e0
+}
+
+body.theme-default chat-panel #chat .reply-form .message-text {
+    background-color: #f5f5f5;
+    border-color: rgba(0,0,0,.12)
+}
+
+body.theme-default chat-panel #chat .reply-form .message-text .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+    background-color: #fff
+}
+
+
+
+body.theme-default chat-start .big-circle {
+    background: #fff;
+    border-color: rgba(0,0,0,.12)
+}
+
+body.theme-default chat-view .chat .chat-toolbar {
+    border-bottom-color: rgba(0,0,0,.12)
+}
+
+body.theme-default chat-view .chat #chat-content .message-row.contact .bubble {
+    background-color: #3c4252;
+    color: #fff
+}
+
+body.theme-default chat-view .chat #chat-content .message-row.me .bubble {
+    color: rgba(0,0,0,.87);
+    background-color: #e0e0e0
+}
+
+body.theme-default chat-view .chat .chat-footer {
+    background: #f5f5f5;
+    border-top-color: rgba(0,0,0,.12)
+}
+
+body.theme-default chat-view .chat .chat-footer .reply-form .message-text {
+    background-color: #f5f5f5;
+    border-color: rgba(0,0,0,.12)
+}
+
+body.theme-default chat-view .chat .chat-footer .reply-form .message-text .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+    border-color: rgba(0,0,0,.12);
+    background-color: #fff
+}
+
+body.theme-default chat-chats-sidenav .sidenav-header mat-toolbar {
+    border-bottom-color: rgba(0,0,0,.12)
+}
+
+body.theme-default chat-chats-sidenav .sidenav-header mat-toolbar .search {
+    background: #fafafa;
+    border-color: rgba(0,0,0,.12)
+}
+
+body.theme-default chat-chats-sidenav .sidenav-header mat-toolbar .search input {
+    background: #fafafa;
+    color: rgba(0,0,0,.87)
+}
+
+body.theme-default chat-chats-sidenav .sidenav-content .chat-list .mat-subheader, body.theme-default chat-chats-sidenav .sidenav-content .contact-list .mat-subheader {
+    color: #039be5
+}
+
+body.theme-default chat-chats-sidenav .sidenav-content .chat-list .contact, body.theme-default chat-chats-sidenav .sidenav-content .contact-list .contact {
+    border-bottom-color: rgba(0,0,0,.12)
+}
+
+body.theme-default chat-chats-sidenav .sidenav-content .chat-list .contact .contact-last-message, body.theme-default chat-chats-sidenav .sidenav-content .chat-list .contact .contact-mood, body.theme-default chat-chats-sidenav .sidenav-content .contact-list .contact .contact-last-message, body.theme-default chat-chats-sidenav .sidenav-content .contact-list .contact .contact-mood {
+    color: rgba(0,0,0,.54)
+}
+
+
+
+
+
+
+

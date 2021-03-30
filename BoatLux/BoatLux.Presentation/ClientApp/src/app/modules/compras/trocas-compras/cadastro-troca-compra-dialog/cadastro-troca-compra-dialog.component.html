@@ -1,0 +1,152 @@
+<form fxLayout="column" [formGroup]="cadastroFormGroup" autocomplete="off" #cadastroForm="ngForm">
+    <h1 mat-dialog-title>
+        {{titulo}}
+        <button type="button" mat-icon-button (click)="dialogRef.close()" style="float:right;">
+            <mat-icon>close</mat-icon>
+        </button>
+        <mat-icon *ngIf="fornecPossuiPendencia" matTooltip="Fornecedor possui pendência. Para visualizá-la, clique em Pendências do Fornecedor." matTooltipClass="blue-500-bg" class="left-action-button blue-200">
+            bookmarks
+        </mat-icon>
+    </h1>
+    <mat-dialog-content>
+        <!-- TAB GROUP -->
+        <mat-tab-group>
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <mat-icon class="mr-8">assignment</mat-icon>
+                    Dados da troca
+                </ng-template>
+                <br />
+                <controles-combo-loja #comboLoja></controles-combo-loja>
+                <div fxLayout="column">
+                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                        <mat-form-field fxFlex>
+                            <mat-label>Data do lançamento</mat-label>
+                            <input fxFlex="50%" fxFlex.gt-sm="50%" matInput ngxDaterangepickerMd
+                                   placeholder="Informe a data do lançamento" formControlName="dataLancamento"
+                                   [autoApply]="false" [singleDatePicker]="true" [locale]="locale" type="text" readonly>
+                        </mat-form-field>
+                        <controles-busca-rapida #fornecedor tipo="fornecedor" fxFlex="50%" fxFlex.gt-sm="50%" (change)="verificarPendenciaFornecedor()">
+                        </controles-busca-rapida>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <mat-icon class="mr-8">menu</mat-icon>
+                    Itens da troca
+                </ng-template>
+                <br />
+                <mat-card *ngIf="exibeProdutosCarregando" class="mt-20"
+                          style="display: flex; justify-content: center; align-items: center">
+                    <div>
+                        <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                        </mat-progress-spinner>
+                    </div>
+                    <div style="padding-left: 15px;">
+                        <h2>
+                            Aguarde enquanto montamos sua sugestão de compras...
+                        </h2>
+                    </div>
+                </mat-card>
+                <div [hidden]="exibeProdutosCarregando">
+                    <mat-card class="search-filter-card">
+                        <mat-card-content>
+                            <div fxLayout="row">
+                                <mat-form-field fxFlex="100">
+                                    <mat-label>Filtre os produtos desta troca</mat-label>
+                                    <input matInput type="text" placeholder="Filtre os produtos pelo ID ou descrição"
+                                           [(ngModel)]="filtroDescricaoProdutos" [ngModelOptions]="{standalone: true}"
+                                           (keyup)="aplicarFiltroProdutos()">
+                                </mat-form-field>
+                            </div>
+                        </mat-card-content>
+                        <mat-card-actions>
+                            <button type="button" mat-raised-button color="accent" class="blue-bg"
+                                    (click)="adicionarProduto()">
+                                <mat-icon>playlist_add</mat-icon>
+                                Adicionar produto
+                            </button>
+                        </mat-card-actions>
+                    </mat-card>
+                    <table mat-table class="table table-medium table-hover" [dataSource]="produtosDataSource" matSort>
+                        <ng-container matColumnDef="barra">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Barra</th>
+                            <td mat-cell *matCellDef="let item">{{item.barra}}</td>
+                            <td mat-footer-cell *matFooterCellDef colspan="2">Totalização geral</td>
+                        </ng-container>
+                        <ng-container matColumnDef="descricao">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+                            <td mat-cell *matCellDef="let item">{{item.descricao}}</td>
+                            <td mat-footer-cell *matFooterCellDef [hidden]="true"></td>
+                        </ng-container>
+                        <ng-container matColumnDef="quantidade">
+                            <th mat-header-cell *matHeaderCellDef>Quantidade</th>
+                            <td mat-cell *matCellDef="let item">
+                                <input matInput maxlength="10" currencyMask
+                                       [options]="{ prefix: '', thousands: '.', decimal: ',', allowNegative: false, allowZero: false, nullable: false, align: 'left', precision: 3, inputMode: 1 }"
+                                       placeholder="" [(ngModel)]="item.quantidade"
+                                       (ngModelChange)="item.alterado = true"
+                                       [ngModelOptions]="{standalone: true}" style="color: blue; font-weight: bold;">
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef colspan="2">{{calcularQuantidadeGeral()}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="precoCusto">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>R$ Custo</th>
+                            <td mat-cell *matCellDef="let item">
+                                <input matInput maxlength="10" currencyMask
+                                       [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: false, nullable: false, align: 'left', precision: 3, inputMode: 1 }"
+                                       placeholder="" [(ngModel)]="item.precoCusto"
+                                       (ngModelChange)="item.alterado = true"
+                                       [ngModelOptions]="{standalone: true}" readonly>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef [hidden]="true"></td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="valorTotal">
+                            <th mat-header-cell *matHeaderCellDef>R$ Total</th>
+                            <td mat-cell *matCellDef="let item">{{ calcularTotal(item) }}</td>
+                            <td mat-footer-cell *matFooterCellDef>{{ calcularTotalGeral() }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="acoes">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: right !important;">Ações</th>
+                            <td mat-cell *matCellDef="let item;" style="text-align: right;">
+                                <button type="button" mat-icon-button aria-label="Histórico" class="green-fg"
+                                        (click)="abrirJanelaDetalhesProduto(item)" matTooltip="Informações do produto">
+                                    <mat-icon>info</mat-icon>
+                                </button>
+                                <button type="button" mat-icon-button aria-label="Excluir" class="red-fg"
+                                        (click)="removerProduto(item)" matTooltip="Excluir">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef></td>
+                        </ng-container>
+
+                        <tr mat-header-row style="white-space: nowrap;" *matHeaderRowDef="colunasItens;"></tr>
+                        <tr mat-row style="white-space: nowrap;" *matRowDef="let row; columns: colunasItens"
+                            [ngClass]="{'green-50-bg': row.alterado }"></tr>
+                        <tr mat-footer-row *matFooterRowDef="colunasItens"></tr>
+                    </table>
+
+                    <mat-paginator [pageSizeOptions]="[10, 50]" showFirstLastButtons></mat-paginator>
+                    <br />
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+        <!-- / TAB GROUP -->
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button type="button" mat-button (click)="dialogRef.close()" class="grey-300-bg">
+            Fechar
+        </button>
+        <button type="button" mat-button (click)="abrirPendenciasDoFornecedor()" class="blue-200-bg">
+            <mat-icon>bookmarks</mat-icon>
+            Pendências do fornecedor
+        </button>
+        <button type="button" mat-raised-button color="accent" class="green-bg" (click)="salvarCadastro()">
+            <mat-icon>check</mat-icon>
+            Salvar
+        </button>
+    </mat-dialog-actions>
+</form>

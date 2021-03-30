@@ -1,0 +1,177 @@
+<h1 mat-dialog-title>
+    Baixar Contas a Receber - Por Valor
+    <button mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+</h1>
+
+<mat-dialog-content>
+
+    <mat-card>
+        <form fxLayout="column" [formGroup]="baixaFormGroup" autocomplete="off">
+            <div [style.pointer-events]="desabilitaCampo(1)" [style.opacity]="desabilitaCampo(2)">
+                <div fxLayout="column">
+                    <controles-busca-rapida #cliente tipo="cliente"></controles-busca-rapida>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                <mat-form-field fxFlex="50" fxFlex.gt-sm="100%">
+                    <input matInput ngxDaterangepickerMd placeholder="Data de Pagamento"
+                           formControlName="dtPagto"
+                           [autoApply]="false"
+                           [singleDatePicker]="true"
+                           [locale]="locale"
+                           [minDate]="minDate"
+                           [maxDate]="maxDate"
+                           type="text"
+                           readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex="50" fxFlex.gt-sm="100%">
+                    <mat-label>Valor recebido</mat-label>
+                    <input matInput
+                           formControlName="valorRecebido"
+                           maxlength="16"
+                           currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                           placeholder="Digite o valor recebido. Exemplo: 200,00."
+                           (ngModelChange)="pintarGrid();" />
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                <controles-busca-rapida #conta tipo="conta" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                <controles-busca-rapida #formapg tipo="formapg" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                <controles-busca-rapida #operacaofinanceira tipo="operacaofinanceira" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                    <mat-label>Docto/Nota</mat-label>
+                    <input type="text" matInput formControlName="numDocto" placeholder="Docto/Nota.">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column" *ngIf="exibeDesctoAcrescimo()">
+                <!-- Desconto -->
+                <mat-form-field fxFlex="20%">
+                    <mat-label>Desconto</mat-label>
+                    <input type="text"
+                           matInput
+                           formControlName="desconto"
+                           maxlength="8"
+                           currencyMask [options]="obterMaskDesconto()"
+                           placeholder="Desconto"
+                           oninput="validity.valid || (value='');">
+                </mat-form-field>
+                <mat-button-toggle-group formControlName="tipoDesconto" class="toogle-group">
+                    <mat-button-toggle value="1">Percentual</mat-button-toggle>
+                    <mat-button-toggle value="2">Valor</mat-button-toggle>
+                </mat-button-toggle-group>
+                <!-- Acréscimo -->
+                <mat-form-field fxFlex="20%">
+                    <mat-label>Acréscimo</mat-label>
+                    <input type="text"
+                           matInput
+                           formControlName="acrescimo"
+                           maxlength="8"
+                           currencyMask [options]="obterMaskAcrescimo()"
+                           placeholder="Acrescimo"
+                           oninput="validity.valid || (value='');">
+                </mat-form-field>
+                <mat-button-toggle-group formControlName="tipoAcrescimo" class="toogle-group">
+                    <mat-button-toggle value="1">Percentual</mat-button-toggle>
+                    <mat-button-toggle value="2">Valor</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+            <br />
+            <div fxLayout="row" fxLayout.lt-md="column" style="max-width:90%">
+                <fieldset>
+                    <legend>
+                        Forma de Vencimento do Título a Gerar (Quando baixa parcial)
+                    </legend>
+                    <mat-radio-group formControlName="rbFormaVencto" fxLayoutGap="20px" fxLayout="row" fxLayout.lt-md="column">
+                        <mat-radio-button value="1">Data do Vencimento do Título Baixado</mat-radio-button>
+                        <mat-radio-button value="2">Data Atual da Baixa</mat-radio-button>
+                    </mat-radio-group>
+                </fieldset>
+            </div>
+        </form>
+    </mat-card>
+    <!-- Legenda -->
+    <controles-legenda #legenda
+                       [itens]="[{titulo: 'Títulos a serem baixados totalmente', cor: 'green'},
+                                 {titulo: 'Títulos a serem baixados parcialmente', cor: 'blue'}]"></controles-legenda>
+    <div>
+        <div class="table-scroller">
+            <table mat-table class="table table-medium table-hover" [dataSource]="itensDataSource" matSort matSortActive="dataDeVencimento" matSortDisableClear matSortDirection="asc">
+                <ng-container matColumnDef="codlojaid">
+                    <th mat-header-cell *matHeaderCellDef>Loja</th>
+                    <td mat-cell *matCellDef="let item">{{item.codLojaId}}</td>
+                </ng-container>
+                <ng-container matColumnDef="receberid">
+                    <th mat-header-cell *matHeaderCellDef>ID</th>
+                    <td mat-cell *matCellDef="let item">{{item.receberId}}</td>
+                </ng-container>
+                <ng-container matColumnDef="numtit">
+                    <th mat-header-cell *matHeaderCellDef>Número do título</th>
+                    <td mat-cell *matCellDef="let item">{{item.numTit}}</td>
+                </ng-container>
+                <ng-container matColumnDef="parcela">
+                    <th mat-header-cell *matHeaderCellDef>Parcela</th>
+                    <td mat-cell *matCellDef="let item">{{item.parcela}}</td>
+                </ng-container>
+                <ng-container matColumnDef="dtemissao">
+                    <th mat-header-cell *matHeaderCellDef>Emissão</th>
+                    <td mat-cell *matCellDef="let item">{{item.dtEmissao}}</td>
+                </ng-container>
+                <ng-container matColumnDef="dtvencto">
+                    <th mat-header-cell *matHeaderCellDef>Vencimento</th>
+                    <td mat-cell *matCellDef="let item">{{item.dtVencto}}</td>
+                </ng-container>
+                <ng-container matColumnDef="valor">
+                    <th mat-header-cell *matHeaderCellDef>R$ Título</th>
+                    <td mat-cell *matCellDef="let item">{{item.valor}}</td>
+                </ng-container>
+                <ng-container matColumnDef="valorjuros">
+                    <th mat-header-cell *matHeaderCellDef>R$ Juros</th>
+                    <td mat-cell *matCellDef="let item">
+                        <input matInput
+                               currencyMask [options]="{ prefix: 'R$', suffix: '', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                               [(ngModel)]="item.valorJuros"
+                               [ngModelOptions]="{standalone: true}" />
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="valormulta">
+                    <th mat-header-cell *matHeaderCellDef>R$ Multa</th>
+                    <td mat-cell *matCellDef="let item">
+                        <input matInput
+                               currencyMask [options]="{ prefix: 'R$', suffix: '', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                               [(ngModel)]="item.valorMulta"
+                               [ngModelOptions]="{standalone: true}" />
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="valordesconto">
+                    <th mat-header-cell *matHeaderCellDef>R$ Desconto</th>
+                    <td mat-cell *matCellDef="let item">
+                        <input matInput
+                               currencyMask [options]="{ prefix: 'R$', suffix: '', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                               [(ngModel)]="item.valorDesconto"
+                               [ngModelOptions]="{standalone: true}" />
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="valorreceber">
+                    <th mat-header-cell *matHeaderCellDef>R$ Receber</th>
+                    <td mat-cell *matCellDef="let item">{{item.valorReceber}}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="colunasItens;"></tr>
+                <tr mat-row *matRowDef="let row; columns: colunasItens;"
+                    [ngClass]="{'green-fg': row.baixaIntegral,
+                                'blue-fg' : row.baixaParcial}"></tr>
+            </table>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button type="button" mat-button class="grey-300-bg" (click)="fecharJanela(false)">
+        <mat-icon>cancel</mat-icon>
+        <span fxShow.xs="false">Cancelar</span>
+    </button>
+    <button type="button" mat-raised-button color="accent" class="green-bg" (click)="baixarTitulos()">
+        <mat-icon>save</mat-icon>
+        <span fxShow.xs="false">Baixar Títulos</span>
+    </button>
+</mat-dialog-actions>

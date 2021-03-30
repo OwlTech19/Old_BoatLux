@@ -1,0 +1,46 @@
+<form autocomplete="off" [formGroup]="copiaPedidoFormGroup">
+    <h1 mat-dialog-title>
+        Copiar pedido de compra #{{compraId}}
+        <button type="button" mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+    </h1>
+    <mat-dialog-content>
+        <div fxflex>
+            <div fxLayout.lt-md="column">
+                <controles-combo-loja #comboLoja (aoSelecionarLoja)="aoSelecionarLoja()"></controles-combo-loja>
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                <controles-busca-rapida #comprador tipo="comprador" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                <controles-busca-rapida #fornecedor tipo="fornecedor" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex>
+                    <mat-label>Data do pedido</mat-label>
+                    <input matInput ngxDaterangepickerMd placeholder="Informe a data do pedido" formControlName="dataPedido"
+                           [autoApply]="false"
+                           [singleDatePicker]="true"
+                           [locale]="locale"
+                           type="text" readonly>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <mat-label>Validade do pedido</mat-label>
+                    <input matInput ngxDaterangepickerMd placeholder="Informe a data de validade do pedido" formControlName="validadePedido"
+                           [autoApply]="false"
+                           [singleDatePicker]="true"
+                           [locale]="locale"
+                           [minDate]="minDate"
+                           type="text" readonly>
+                </mat-form-field>
+            </div>
+        </div>
+        <mat-card-actions fxLayoutAlign="end">
+            <button type="button" mat-raised-button color="accent" class="grey-300-bg" (click)="dialogRef.close()">
+                <mat-icon>cancel</mat-icon>
+                Cancelar
+            </button>
+            <button type="button" mat-raised-button color="accent" class="green-bg" (click)="copiarPedido()">
+                <mat-icon>file_copy</mat-icon>
+                Copiar pedido
+            </button>
+        </mat-card-actions>
+    </mat-dialog-content>
+</form>

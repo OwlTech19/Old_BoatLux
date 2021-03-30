@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Jeff\\Projects\\BoatLux\\BoatLux\\BoatLux.API\\BoatLux.API.csproj": {}
+    "D:\\Projects\\BoatLux\\BoatLux\\BoatLux.API\\BoatLux.API.csproj": {}
   },
   "projects": {
-    "C:\\Jeff\\Projects\\BoatLux\\BoatLux\\BoatLux.API\\BoatLux.API.csproj": {
+    "D:\\Projects\\BoatLux\\BoatLux\\BoatLux.API\\BoatLux.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Jeff\\Projects\\BoatLux\\BoatLux\\BoatLux.API\\BoatLux.API.csproj",
+        "projectUniqueName": "D:\\Projects\\BoatLux\\BoatLux\\BoatLux.API\\BoatLux.API.csproj",
         "projectName": "BoatLux.API",
-        "projectPath": "C:\\Jeff\\Projects\\BoatLux\\BoatLux\\BoatLux.API\\BoatLux.API.csproj",
-        "packagesPath": "C:\\Users\\Jefferson\\.nuget\\packages\\",
-        "outputPath": "C:\\Jeff\\Projects\\BoatLux\\BoatLux\\BoatLux.API\\obj\\",
+        "projectPath": "D:\\Projects\\BoatLux\\BoatLux\\BoatLux.API\\BoatLux.API.csproj",
+        "packagesPath": "C:\\Users\\Fabio\\.nuget\\packages\\",
+        "outputPath": "D:\\Projects\\BoatLux\\BoatLux\\BoatLux.API\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Jefferson\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Fabio\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 20.1.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "D:\\Program Files\\DevExpress 20.1\\Components\\System\\Components\\Packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -57,7 +62,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

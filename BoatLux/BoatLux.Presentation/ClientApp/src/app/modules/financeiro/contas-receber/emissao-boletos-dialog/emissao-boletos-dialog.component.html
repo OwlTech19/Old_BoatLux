@@ -1,0 +1,115 @@
+<h1 mat-dialog-title>
+    Emissão de Boletos
+    <button mat-icon-button (click)="fecharJanela(true)" style="float:right;"><mat-icon>close</mat-icon></button>
+</h1>
+<div class="content p-24 vertical-stepper-wrapper">
+    <mat-card class="mat-elevation-z4">
+        <mat-dialog-content>
+            <form fxLayout="column" [formGroup]="boletoFormGroup" autocomplete="off">
+                <mat-card class="search-filter-card">
+                    <mat-card-content>
+                        <!-- Dados para gerar boletos -->
+                        <fieldset>
+                            <legend>
+                                Informe o banco para gerar boletos
+                            </legend>
+                            <controles-busca-rapida #banco tipo="banco" fxFlex="70%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                        </fieldset>
+                        <!-- Botões -->
+                        <mat-card-actions>
+                            <button mat-raised-button type="button" color="accent" class="red-bg" (click)="importarRetorno()" disabled>
+                                <mat-icon>cloud_upload</mat-icon>
+                                Importar Retorno
+                            </button>
+                            <button mat-raised-button type="button" color="accent" class="green-bg" (click)="exportarRemessa()">
+                                <mat-icon>cloud_download</mat-icon>
+                                Exportar Remessa
+                            </button>
+                        </mat-card-actions>
+                    </mat-card-content>
+                </mat-card>
+                <mat-card *ngIf="exibeItensCarregando" class="mt-20" style="display: flex; justify-content: center; align-items: center">
+                    <div>
+                        <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                        </mat-progress-spinner>
+                    </div>
+                    <div style="padding-left: 15px;">
+                        <h2>
+                            Carregando títulos selecionados...
+                        </h2>
+                    </div>
+                </mat-card>
+                <div *ngIf="!exibeItensCarregando && !temItens" class="alert alert-warning mt-20" role="alert">
+                    <mat-icon>warning</mat-icon>
+                    Nenhum título selecionado. Para emitir boletos, selecione títulos no grid de contas a receber!
+                </div>
+                <!-- Legenda -->
+                <controles-legenda [hidden]="!temItens" #legenda
+                                   [itens]="[{titulo: 'Impresso', cor: 'blue'}]"></controles-legenda>
+                <div [hidden]="exibeItensCarregando || !temItens">
+                    <div class="table-scroller">
+                        <table mat-table class="table table-medium table-hover" [dataSource]="itensDataSource" matSortActive="receberid" matSort multiTemplateDataRows>
+                            <ng-container matColumnDef="codlojaid">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Loja</th>
+                                <td mat-cell *matCellDef="let item">{{item.codLojaId}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="receberid">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                                <td mat-cell *matCellDef="let item">{{item.receberId}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="numtit">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Número do título</th>
+                                <td mat-cell *matCellDef="let item">{{item.numTit}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="parcela">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Parcela</th>
+                                <td mat-cell *matCellDef="let item">{{item.parcela}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="razao">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
+                                <td mat-cell *matCellDef="let item">{{item.codClieId}} - {{item.razao}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="dtemissao">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Emissão</th>
+                                <td mat-cell *matCellDef="let item">{{item.dtEmissao}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="dtvencto">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Vencimento</th>
+                                <td mat-cell *matCellDef="let item">{{item.dtVencto}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="valor">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
+                                <td mat-cell *matCellDef="let item">{{item.valor}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="ccusto">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Centro de Custo</th>
+                                <td mat-cell *matCellDef="let item">{{item.cCustoId}} - {{item.descrCCusto}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="observacao">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Observação</th>
+                                <td mat-cell *matCellDef="let item">{{item.observacao}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="acoes" stickyEnd>
+                                <th mat-header-cell *matHeaderCellDef style="text-align: right !important;">Ações</th>
+                                <td mat-cell *matCellDef="let item;" style="text-align: right;">
+                                    <button type="button" mat-icon-button aria-label="Boleto" (click)="imprimirBoleto(item)" class="fuse-black-500-fg" matTooltip="Imprimir Boleto">
+                                        <mat-icon>print</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="colunasItens;"></tr>
+                            <tr mat-row *matRowDef="let row; columns: colunasItens;"
+                                [ngClass]="{'blue-fg'  : row.situacao == 'Aberto' && row.numBoleto != null}"></tr>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </mat-dialog-content>
+    </mat-card>
+</div>
+<mat-dialog-actions align="end">
+    <button mat-button class="grey-300-bg" (click)="fecharJanela(true)">
+        <mat-icon>cancel</mat-icon>
+        <span fxShow.xs="false">Fechar</span>
+    </button>
+</mat-dialog-actions>

@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>{{titulo}}</h1>
+<mat-dialog-content>
+    <form fxLayout="column" [formGroup]="cadastroFormGroup" autocomplete="off">
+        <mat-form-field fxFlex="100" *ngIf="data.item != null">
+            <mat-label>ID</mat-label>
+            <input type="number" matInput formControlName="id" />
+        </mat-form-field>
+        <mat-form-field fxFlex="100">
+            <mat-label>Descrição</mat-label>
+            <input type="text" matInput formControlName="descricao" placeholder="Digite entre 3 e 100 caracteres." minlength="3" maxlength="100" required autoFocus />
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="cancelarCadastro()">Cancelar</button>
+    <button mat-raised-button color="accent"  [mat-dialog-close]="data" (click)="cadastroFormGroup.valid && salvarCadastro();" [disabled]="!cadastroFormGroup.valid">Concluir</button>
+</mat-dialog-actions>

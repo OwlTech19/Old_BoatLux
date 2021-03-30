@@ -1,0 +1,124 @@
+<h1 mat-dialog-title>
+    Rel. de Contas a Receber - Filtros para impressão
+    <button mat-icon-button (click)="dialogRef.close()" style="float:right;">
+        <mat-icon>close</mat-icon>
+    </button>
+</h1>
+<mat-dialog-content>
+    <form fxLayout="column" [formGroup]="filtrosFormGroup" autocomplete="off">
+        <mat-card-content>
+            <div fxLayout="column">
+                <controles-combo-loja #comboLoja (aoSelecionarLoja)="aoSelecionarLoja()" multiLoja="true"></controles-combo-loja>
+            </div>
+            <div fxLayout="column">
+                <controles-busca-rapida #cliente tipo="cliente"></controles-busca-rapida>
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex class="pl-4">
+                    <mat-select placeholder="Filtrar data" formControlName="tipoData">
+                        <mat-option value="1">Data de vencimento</mat-option>
+                        <mat-option value="2">Data de recebimento</mat-option>
+                        <mat-option value="3">Data de emissão</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <input matInput ngxDaterangepickerMd
+                           placeholder="Período"
+                           formControlName="periodo"
+                           [autoApply]="false"
+                           [alwaysShowCalendars]="true"
+                           [ranges]="ranges"
+                           [showClearButton]="true"
+                           type="text"
+                           readonly>
+                </mat-form-field>
+                <controles-busca-rapida #tipocliente tipo="tipocliente" fxFlex></controles-busca-rapida>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                <controles-busca-rapida #banco tipo="banco" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                <controles-busca-rapida #tipodocumento tipo="tipodocumento" fxFlex="50%" fxFlex.gt-sm="100%">
+                </controles-busca-rapida>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                <controles-busca-rapida #operacaofinanceira tipo="operacaofinanceira" fxFlex="50%" fxFlex.gt-sm="100%">
+                </controles-busca-rapida>
+                <controles-busca-rapida #centrodecusto tipo="centrodecusto" fxFlex="50%" fxFlex.gt-sm="100%">
+                </controles-busca-rapida>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                <div fxFlex="50%" fxFlex.gt-sm="100%" [style.pointer-events]="desabilitaConta(1)" [style.opacity]="desabilitaConta(2)">
+                    <controles-busca-rapida #conta tipo="conta"></controles-busca-rapida>
+                </div>
+                <controles-busca-rapida #vendedor tipo="vendedor" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                <mat-form-field fxFlex="30" fxFlex.gt-sm="100%">
+                    <mat-select placeholder="Situação" formControlName="situacao">
+                        <mat-option value="">Todos</mat-option>
+                        <mat-option value="AB">Abertos</mat-option>
+                        <mat-option value="BP,BT">Baixados</mat-option>
+                        <mat-option value="CA">Cancelados</mat-option>
+                        <mat-option value="BT">Baixados total</mat-option>
+                        <mat-option value="BP">Baixados parcial</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="40">
+                    <mat-label>Número do título</mat-label>
+                    <input type="text" matInput formControlName="numtitulo" maxlength="15"
+                           placeholder="Número do título">
+                </mat-form-field>
+                <mat-form-field fxFlex="20" fxFlex.gt-sm="50%">
+                    <mat-label>Parcelas</mat-label>
+                    <input type="text" matInput maxlength="6" formControlName="parcela" placeholder="Digite a parcela. Exemplo: 2.">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+                <mat-form-field fxFlex="30" fxFlex.gt-sm="100%">
+                    <mat-select placeholder="Quebra por" formControlName="quebra">
+                        <mat-option value="0">Cliente</mat-option>
+                        <mat-option value="1">Centro de custo</mat-option>
+                        <mat-option value="2">Data</mat-option>
+                        <mat-option value="3">Banco</mat-option>
+                        <mat-option value="4" [disabled]="desabilitaCampo('formapg')">Forma de pagamento</mat-option>
+                        <mat-option value="5">Loja</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="30" fxFlex.gt-sm="100%">
+                    <mat-select placeholder="Tipo de dados" formControlName="tipoDados">
+                        <mat-option value="0">Analítico</mat-option>
+                        <mat-option value="1">Sintético</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="30" fxFlex.gt-sm="100%">
+                    <mat-select placeholder="Ordenação dos clientes por" formControlName="ordenacaoClientes"
+                                [disabled]="desabilitaCampo('ordenacaoCliente')">
+                        <mat-option value="0">Código do cliente</mat-option>
+                        <mat-option value="1">Razão social</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-checkbox fxLayout="row" formControlName="impPorPagina">Imprimir relatório por página</mat-checkbox>
+            </div>
+        </mat-card-content>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-raised-button type="button" class="grey-300-bg" (click)="fecharJanela()">
+        <mat-icon>close</mat-icon>
+        <span fxShow.xs="false">Fechar</span>
+    </button>
+    <button mat-raised-button type="button" color="accent" class="orange-bg" (click)="definirDadosDefault()">
+        <mat-icon>clear</mat-icon>
+        <span fxShow.xs="false">Limpar</span>
+    </button>
+    <button mat-raised-button type="button" color="accent" class="cyan-bg" [matMenuTriggerFor]="menuImpressao">
+        <mat-icon>print</mat-icon>
+        <span fxShow.xs="false">Imprimir</span>
+    </button>
+    <mat-menu #menuImpressao="matMenu">
+        <button mat-menu-item (click)="imprimir(1, true)">Visualizar</button>
+        <button mat-menu-item (click)="imprimir(1, false)">Exportar PDF</button>
+        <button mat-menu-item (click)="imprimir(2, false)">Exportar XLS</button>
+    </mat-menu>
+</mat-dialog-actions>

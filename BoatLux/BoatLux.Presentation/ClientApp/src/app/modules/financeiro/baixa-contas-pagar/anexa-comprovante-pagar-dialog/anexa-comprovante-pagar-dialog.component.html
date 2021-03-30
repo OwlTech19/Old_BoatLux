@@ -1,0 +1,32 @@
+<!-- HEADER -->
+<h1 mat-dialog-title>
+    Adicionar Comprovante de Pagamento
+    <button mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+</h1>
+<!-- / HEADER -->
+<!-- CONTENT -->
+<div class="custom-dropzone" ngx-dropzone
+     [multiple]="false"
+     (change)="onSelect($event)">
+    <ngx-dropzone-label>
+        <div>
+            <h2>Arraste o comprovante ou clique para selecioná-lo</h2>
+        </div>
+    </ngx-dropzone-label>
+    <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+        <ngx-dropzone-label>{{ f.name }}</ngx-dropzone-label>
+    </ngx-dropzone-preview>
+</div>
+<!-- / CONTENT -->
+<!-- ACTIONS -->
+<mat-dialog-actions align="end">
+    <button type="button" mat-button class="grey-300-bg" (click)="dialogRef.close()">
+        <mat-icon>cancel</mat-icon>
+        <span fxShow.xs="false">Cancelar</span>
+    </button>
+    <button type="button" mat-raised-button color="accent" class="green-bg" (click)="adicionarComprovante()">
+        <mat-icon>save</mat-icon>
+        <span fxShow.xs="false">Adicionar</span>
+    </button>
+</mat-dialog-actions>
+<!-- / ACTIONS -->

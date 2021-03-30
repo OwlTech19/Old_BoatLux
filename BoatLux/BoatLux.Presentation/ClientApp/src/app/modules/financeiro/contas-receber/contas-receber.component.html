@@ -1,0 +1,287 @@
+<style>
+    .text-bold {
+        font-weight: bold;
+    }
+</style>
+
+<div id="forms" class="page-layout simple fullwidth" fxLayout="column">
+    <!-- HEADER -->
+    <titulo-pagina titulo="Módulo Financeiro" subTitulo="Contas a Receber"></titulo-pagina>
+    <!-- / HEADER -->
+    <!-- CONTENT -->
+    <div class="content p-24 vertical-stepper-wrapper">
+        <mat-card class="mat-elevation-z4">
+            <mat-card-content>
+                <form [formGroup]="buscaFormGroup" autocomplete="off" (submit)="buscarItens(true)">
+                    <mat-card class="search-filter-card">
+                        <mat-card-content>
+                            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                <controles-combo-loja #comboLoja (aoSelecionarLoja)="aoSelecionarLoja()" multiLoja="true" fxFlex="50%" fxFlex.gt-sm="100%"></controles-combo-loja>
+                                <controles-busca-rapida #cliente tipo="cliente" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                            </div>
+                            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                <controles-busca-rapida #tipocliente tipo="tipocliente" fxFlex="30" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                <controles-busca-rapida #tipodocumento tipo="tipodocumento" fxFlex="30" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                <mat-form-field fxFlex="30" fxFlex.gt-sm="100%">
+                                    <mat-select placeholder="Situação" formControlName="situacao">
+                                        <mat-option value="">Todos</mat-option>
+                                        <mat-option value="AB">Abertos</mat-option>
+                                        <mat-option value="BP,BT">Baixados</mat-option>
+                                        <mat-option value="CA">Cancelados</mat-option>
+                                        <mat-option value="BT">Baixados total</mat-option>
+                                        <mat-option value="BP">Baixados parcial</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                <mat-form-field fxFlex="30" class="pl-4">
+                                    <mat-select placeholder="Filtrar data" formControlName="opcaoTipoData">
+                                        <mat-option value="1">Data de vencimento</mat-option>
+                                        <mat-option value="2">Data de recebimento</mat-option>
+                                        <mat-option value="3">Data de emissão</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field fxFlex>
+                                    <input matInput ngxDaterangepickerMd
+                                           placeholder="Período"
+                                           formControlName="periodo"
+                                           [autoApply]="false"
+                                           [showClearButton]="true"
+                                           [alwaysShowCalendars]="true"
+                                           [ranges]="ranges"
+                                           type="text"
+                                           readonly>
+                                </mat-form-field>
+                            </div>
+                        </mat-card-content>
+                        <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                            <mat-accordion>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Mais opções de filtros
+                                        </mat-panel-title>
+                                        <mat-panel-description>
+                                            Nota, valor, etc.
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
+                                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                                        <mat-form-field fxFlex="20%">
+                                            <mat-label>ID</mat-label>
+                                            <input type="text" matInput formControlName="receberId" placeholder="Digite o código. Exemplo: 123.">
+                                        </mat-form-field>
+                                        <mat-form-field fxFlex="20%">
+                                            <mat-label>Número da nota</mat-label>
+                                            <input type="text" matInput formControlName="notaEcf" placeholder="Digite o número da nota.">
+                                        </mat-form-field>
+                                        <mat-form-field fxFlex="20%">
+                                            <mat-label>Número do título</mat-label>
+                                            <input type="text" matInput formControlName="numTit" placeholder="Digite o número do título.">
+                                        </mat-form-field>
+                                        <mat-form-field fxFlex="20%">
+                                            <mat-label>Parcela</mat-label>
+                                            <input type="text" matInput maxlength="6" formControlName="parcela" placeholder="Digite a parcela. Exemplo: 2.">
+                                        </mat-form-field>
+                                        <mat-form-field fxFlex="20%" class="pl-4">
+                                            <mat-label>Cheque</mat-label>
+                                            <input type="text" matInput formControlName="cheque" placeholder="Digite o número do cheque.">
+                                        </mat-form-field>
+                                    </div>
+                                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+
+                                        <controles-busca-rapida #vendedor tipo="vendedor" fxFlex="40%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+
+                                        <mat-form-field fxFlex="20%">
+                                            <mat-label>Valor</mat-label>
+                                            <input matInput formControlName="valor" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: true, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }" placeholder="Digite o valor. Exemplo: 200,00." />
+                                        </mat-form-field>
+                                        <mat-form-field fxFlex="20%" fxFlex.gt-sm="100%">
+                                            <mat-select placeholder="Situação das Promissórias" formControlName="situacaoPromissoria">
+                                                <mat-option value="">Todas</mat-option>
+                                                <mat-option value="1">Impressas</mat-option>
+                                                <mat-option value="2">Não impressas</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-form-field fxFlex="20%" fxFlex.gt-sm="100%">
+                                            <mat-select placeholder="Situação dos carnês" formControlName="situacaoCarnes">
+                                                <mat-option value="">Todos</mat-option>
+                                                <mat-option value="1">Impressos</mat-option>
+                                                <mat-option value="2">Não impressos</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-form-field fxFlex="20%" fxFlex.gt-sm="100%">
+                                            <mat-select placeholder="Situação dos boletos" formControlName="situacaoBoletos">
+                                                <mat-option value="">Todos</mat-option>
+                                                <mat-option value="1">Impressos</mat-option>
+                                                <mat-option value="2">Não impressos</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </mat-expansion-panel>
+                            </mat-accordion>
+                            <mat-card-actions>
+                                <!-- Menu operações -->
+                                <button mat-raised-button type="button" color="basic" class="left-action-button" [matMenuTriggerFor]="menu" [disabled]="!selection.hasValue()">
+                                    <mat-icon>playlist_add_check</mat-icon>
+                                    Operações
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                    <button mat-menu-item type="button" (click)="cancelarTitulos()" *ngIf="_usuario.checkPermissionControl('267', 'excluir')">Cancelar selecionados</button>
+                                    <button mat-menu-item type="button" (click)="atribuirInformacaoTitulos()" *ngIf="_usuario.checkPermissionControl('267', 'editar')">Atribuir informações</button>
+                                    <button mat-menu-item type="button" (click)="imprimirNotasPromissorias()">Imprimir notas promissórias</button>
+                                    <button mat-menu-item type="button" (click)="imprimirCarnesSelecionados()">Imprimir carnês</button>
+                                    <button mat-menu-item type="button" (click)="estornarTitulos()" *ngIf="_usuario.checkPermissionControl('270', 'editar')">Estornar títulos</button>
+                                </mat-menu>
+                                <!-- Botões -->
+                                <button mat-raised-button type="button" color="accent" class="red-600-bg" (click)="abrirEmissaoBoletos()">
+                                    <mat-icon>payment</mat-icon>
+                                    Emissão de Boletos
+                                </button>
+                                <button mat-raised-button type="button" color="accent" class="green-bg" (click)="novoTitulo()" *ngIf="_usuario.checkPermissionControl('267', 'incluir')">
+                                    <mat-icon>add</mat-icon>
+                                    Novo
+                                </button>
+                                <button mat-raised-button type="button" color="accent" class="cyan-bg" (click)="imprimirRelatorio()" *ngIf="_usuario.checkPermissionControl('267', 'imprimir')">
+                                    <mat-icon>print</mat-icon>
+                                    Imprimir
+                                </button>
+                                <button mat-raised-button type="button" color="accent" class="orange-bg" (click)="definirDadosPadrao()">
+                                    <mat-icon>clear</mat-icon>
+                                    Limpar
+                                </button>
+                                <button mat-raised-button type="submit" color="accent" class="blue-bg">
+                                    <mat-icon>search</mat-icon>
+                                    Buscar
+                                </button>
+                            </mat-card-actions>
+                        </div>
+                    </mat-card>
+                    <mat-card *ngIf="exibeItensCarregando" class="mt-20" style="display: flex; justify-content: center; align-items: center">
+                        <div>
+                            <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                            </mat-progress-spinner>
+                        </div>
+                        <div style="padding-left: 15px;">
+                            <h2>
+                                Buscando itens...
+                            </h2>
+                        </div>
+                    </mat-card>
+                    <div *ngIf="!exibeItensCarregando && !temItens" class="alert alert-warning mt-20" role="alert">
+                        <mat-icon>warning</mat-icon>
+                        Não encontramos resultados para sua busca. Altere os filtros e tente novamente.
+                    </div>
+                    <!-- Legenda -->
+                    <controles-legenda [hidden]="!temItens" #legenda
+                                       [itens]="[{titulo: 'Vencimento Hoje', cor: 'indigo'},
+                                                 {titulo: 'Cancelados', cor: 'red'},
+                                                 {titulo: 'Baixados', cor: 'green'},
+                                                 {titulo: 'Vencidos até 30 dias', cor: 'blue'},
+                                                 {titulo: 'Vencidos entre 30 e 60 dias', cor: 'pink'},
+                                                 {titulo: 'Vencidos + 60 dias', cor: 'orange'}]"></controles-legenda>
+                    <div [hidden]="exibeItensCarregando || !temItens">
+                        <div class="table-scroller">
+                            <table mat-table class="table table-medium table-hover" [dataSource]="itensDataSource" matSortActive="receberid" matSort multiTemplateDataRows>
+                                <ng-container matColumnDef="select">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                      [checked]="selection.hasValue() && isAllSelected()"
+                                                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                        </mat-checkbox>
+                                    </th>
+                                    <td mat-cell *matCellDef="let item">
+                                        <mat-checkbox (click)="$event.stopPropagation()"
+                                                      (change)="$event ? selection.toggle(item.receberId) : null; addSelectionModel(item, $event.checked);"
+                                                      [checked]="selection.isSelected(item.receberId)">
+                                        </mat-checkbox>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="codlojaid">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Loja</th>
+                                    <td mat-cell *matCellDef="let item">{{item.codLojaId}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="receberid">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                                    <td mat-cell *matCellDef="let item">{{item.receberId}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="numtit">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Número do título</th>
+                                    <td mat-cell *matCellDef="let item">{{item.numTit}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="parcela">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Parcela</th>
+                                    <td mat-cell *matCellDef="let item">{{item.parcela}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="notaecf">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nota</th>
+                                    <td mat-cell *matCellDef="let item">{{item.notaEcf}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="razao">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
+                                    <td mat-cell *matCellDef="let item">{{item.codClieId}} - {{item.razao}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="dtemissao">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Emissão</th>
+                                    <td mat-cell *matCellDef="let item">{{item.dtEmissao}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="dtvencto">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Vencimento</th>
+                                    <td mat-cell *matCellDef="let item">{{item.dtVencto}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="dtpagto">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Pagamento</th>
+                                    <td mat-cell *matCellDef="let item">{{item.dtPagto}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="valor">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
+                                    <td mat-cell *matCellDef="let item">{{item.valor}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="valorpago">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor pago</th>
+                                    <td mat-cell *matCellDef="let item">{{item.valorPago}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="valorjuros">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header hidden>Juros</th>
+                                    <td mat-cell *matCellDef="let item" hidden>{{item.valorJuros}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="situacao">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Situação</th>
+                                    <td mat-cell *matCellDef="let item">{{item.situacao}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="acoes" stickyEnd>
+                                    <th mat-header-cell *matHeaderCellDef style="text-align: right !important;">Ações</th>
+                                    <td mat-cell *matCellDef="let item;" style="text-align: right;">
+                                        <button type="button" mat-icon-button aria-label="Comprovante" (click)="imprimirComprovante(item)" class="fuse-black-500-fg" matTooltip="Imprimir Comprovante" *ngIf="item.situacao === 'Baixa Total' || item.situacao === 'Baixa Parcial'">
+                                            <mat-icon>print</mat-icon>
+                                        </button>
+                                        <button type="button" mat-icon-button aria-label="Consultar" (click)="consultarCupomNf(item)" class="green-fg" matTooltip="Consultar Cupom / NF-e" *ngIf="item.codNf > 0 || item.codLanctoPdv != null">
+                                            <mat-icon>remove_red_eye</mat-icon>
+                                        </button>
+                                        <button type="button" mat-icon-button aria-label="Editar" (click)="editarTitulo(item)" class="blue-fg" matTooltip="Editar/Consultar" *ngIf="_usuario.checkPermissionControl('267', 'editar') || _usuario.checkPermissionControl('267', 'consultar')">
+                                            <mat-icon>create</mat-icon>
+                                        </button>
+                                        <button mat-icon-button aria-label="Cancelar" class="red-fg" matTooltip="Cancelar" (click)="cancelarTitulo(item)" *ngIf="_usuario.checkPermissionControl('267', 'excluir')">
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="colunasItens;"></tr>
+                                <tr mat-row *matRowDef="let row; columns: colunasItens;"
+                                    [ngClass]="{'green-fg' : row.situacao == 'Baixa Total' || row.situacao == 'Baixa Parcial',
+                                                'red-fg'   : row.situacao == 'Cancelado',
+                                                'blue-fg'  : row.situacao == 'Aberto' && _utils.verificarVencidosTrinta(row.dtVencto),
+                                                'pink-fg'  : row.situacao == 'Aberto' && _utils.verificarVencidosTrintaSessenta(row.dtVencto),
+                                                'orange-fg': row.situacao == 'Aberto' && _utils.verificarVencidosSessenta(row.dtVencto),
+                                                'indigo-fg': row.venceHoje,
+                                                'text-bold':  row.venceHoje}"></tr>
+                            </table>
+                        </div>
+                        <mat-paginator [pageSizeOptions]="[10, 50]" showFirstLastButtons></mat-paginator>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <!-- / CONTENT -->
+</div>

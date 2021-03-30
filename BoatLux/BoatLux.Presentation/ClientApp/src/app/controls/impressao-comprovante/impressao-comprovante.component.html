@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1">
+    <title></title>
+</head>
+<body style="overflow-y:scroll">
+    <div class="reduzida print">
+        <div *ngFor="let comprov of comprovantes">
+            <div ID="impressao">
+                <table class="cabecalho">
+                    <tr>
+                        <td align="left">
+                            <label>{{descrTitulo}} - Títulos Pagos</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <label>{{comprov.razao}}</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <label>{{comprov.endereco}}</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <label>{{comprov.cidade}} - {{comprov.estado}}</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <label>{{comprov.fone}}</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <label>{{comprov.dataHora}}</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <label>{{comprov.usuario}}</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <label>{{comprov.clienteFornecedor}}</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <span>Forma de Pagamento: </span>
+                            <label>{{comprov.formaPagto}}</label>
+                        </td>
+                    </tr>
+                </table>
+                <div ID="titulos" width="100%">
+                    <hr style="border: 1px dashed" />
+
+                    <div *ngFor="let item of comprov.titulo">
+
+                        <table width="100%" border="0">
+                            <tr class="label-bold">
+                                <td align="left">Emissão</td>
+                                <td align="left">Título</td>
+                                <td align="right">Valor</td>
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                    <label>{{item.dtEmissao}}</label>
+                                </td>
+                                <td align="left">
+                                    <label>{{item.numTit}}</label>
+                                </td>
+                                <td align="right">
+                                    <input matInput maxlength="15"
+                                           currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                           placeholder="" [(ngModel)]="item.valor"
+                                           [ngModelOptions]="{standalone: true}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" colspan="3">
+                                    <label [hidden]="!imprimeObservacao">Obs.: {{item.observacao}}</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <hr style="border: 1px dashed" />
+                </div>
+                <div ID="titulosAbertos" width="100%">
+                    <hr style="border: 1px dashed" />
+
+                    <div *ngFor="let item of comprov.titulosAbertos">
+                        <table width="100%" border="0">
+                            <tr class="label-bold">
+                                <td align="left" width="50%">Título/Parc.</td>
+                                <td align="left" width="25%">Vencto</td>
+                                <td align="right" width="25%">Valor</td>
+                            </tr>
+                            <tr>
+                                <td align="left" width="50%">
+                                    <label>{{item.numTit}} / {{item.parcela}}</label>
+                                </td>
+                                <td align="left" width="25%">
+                                    <label>{{item.dtVencto}}</label>
+                                </td>
+                                <td align="right" width="25%">
+                                    <input matInput maxlength="15"
+                                           currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                           placeholder="" [(ngModel)]="item.valor"
+                                           [ngModelOptions]="{standalone: true}" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <hr style="border: 1px dashed" />
+                </div>
+                <hr size="1" style="border: 1px dashed" />
+                <table>
+                    <tr>
+                        <td><span>TOTAL TITULOS:</span></td>
+                        <td align="right">
+                            <label>
+                                <input matInput maxlength="15"
+                                       currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                       placeholder="" [(ngModel)]="comprov.totalTitulos"
+                                       [ngModelOptions]="{standalone: true}" />
+                            </label>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td><span>ENCARGOS:</span></td>
+                        <td align="right">
+                            <label>
+                                <input matInput maxlength="15"
+                                       currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                       placeholder="" [(ngModel)]="comprov.encargos"
+                                       [ngModelOptions]="{standalone: true}" />
+                            </label>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td><span>TOTAL PAGO:</span></td>
+                        <td align="right">
+                            <label>
+                                <input matInput maxlength="15"
+                                       currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                       placeholder="" [(ngModel)]="comprov.totalPago"
+                                       [ngModelOptions]="{standalone: true}" />
+                            </label>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td><span id="lblTitPagar">TOTAL A PAGAR:</span></td>
+                        <td align="right">
+                            <label>
+                                <input matInput maxlength="15"
+                                       currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                       placeholder="" [(ngModel)]="comprov.totalPagar"
+                                       [ngModelOptions]="{standalone: true}" />
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+                <hr size="1" style="border: 1px dashed" />
+                <br />
+                <hr size="1" style="border: 1px dashed" />
+            </div>
+            <div ID="impressao2">
+                <table class="cabecalho">
+                    <tr>
+                        <td align="left">
+                            <label>{{descrTitulo}} - Títulos Pagos</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <label>{{comprov.razao}}</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <label>{{comprov.endereco}}</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <label>{{comprov.cidade}} - {{comprov.estado}}</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <label>{{comprov.fone}}</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <label>{{comprov.dataHora}}</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <label>{{comprov.usuario}}</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <label>{{comprov.clienteFornecedor}}</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <span>Forma de Pagamento: </span>
+                            <label>{{comprov.formaPagto}}</label>
+                        </td>
+                    </tr>
+                </table>
+                <div ID="titulos2" width="100%">
+                    <hr style="border: 1px dashed" />
+                    <div *ngFor="let item of comprov.titulo">
+
+                        <table width="100%" border="0">
+                            <tr class="label-bold">
+                                <td align="left">Emissão</td>
+                                <td align="left">Título</td>
+                                <td align="right">Valor</td>
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                    <label>{{item.dtEmissao}}</label>
+                                </td>
+                                <td align="left">
+                                    <label>{{item.numTit}}</label>
+                                </td>
+                                <td align="right">
+                                    <input matInput maxlength="15"
+                                           currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                           placeholder="" [(ngModel)]="item.valor"
+                                           [ngModelOptions]="{standalone: true}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" colspan="3">
+                                    <label [hidden]="!imprimeObservacao">Obs.: {{item.observacao}}</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <hr style="border: 1px dashed" />
+                </div>
+                <div ID="titulosAbertos2" width="100%">
+                    <hr style="border: 1px dashed" />
+                    <div *ngFor="let item of titulosAbertos">
+                        <table width="100%" border="0">
+                            <tr class="label-bold">
+                                <td align="left" width="50%">Título/Parc.</td>
+                                <td align="left" width="25%">Vencto</td>
+                                <td align="right" width="25%">Valor</td>
+                            </tr>
+                            <tr>
+                                <td align="left" width="50%">
+                                    <label>{{item.numTit}} / {{item.parcela}}</label>
+                                </td>
+                                <td align="left" width="25%">
+                                    <label>{{item.dtVencto}}</label>
+                                </td>
+                                <td align="right" width="25%">
+                                    <input matInput maxlength="15"
+                                           currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                           placeholder="" [(ngModel)]="item.valor"
+                                           [ngModelOptions]="{standalone: true}" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <hr style="border: 1px dashed" />
+                </div>
+                <hr size="1" style="border: 1px dashed" />
+                <table>
+                    <tr>
+                        <td><span>TOTAL TITULOS:</span></td>
+                        <td align="right">
+                            <label>
+                                <input matInput maxlength="15"
+                                       currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                       placeholder="" [(ngModel)]="comprov.totalTitulos"
+                                       [ngModelOptions]="{standalone: true}" />
+                            </label>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td><span>ENCARGOS:</span></td>
+                        <td align="right">
+                            <label>
+                                <input matInput maxlength="15"
+                                       currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                       placeholder="" [(ngModel)]="comprov.encargos"
+                                       [ngModelOptions]="{standalone: true}" />
+                            </label>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td><span>TOTAL PAGO:</span></td>
+                        <td align="right">
+                            <label>
+                                <input matInput maxlength="15"
+                                       currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                       placeholder="" [(ngModel)]="comprov.totalPago"
+                                       [ngModelOptions]="{standalone: true}" />
+                            </label>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td><span id="lblTitPagar">TOTAL A PAGAR:</span></td>
+                        <td align="right">
+                            <label>
+                                <input matInput maxlength="15"
+                                       currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'right', precision: 2, inputMode: 1 }"
+                                       placeholder="" [(ngModel)]="comprov.totalPagar"
+                                       [ngModelOptions]="{standalone: true}" />
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+                <hr size="1" style="border: 1px dashed" />
+                <br />
+                <hr size="1" style="border: 1px dashed" />
+
+
+                <span>
+                    <input matInput maxlength="15"
+                           currencyMask [options]="{ prefix: 'Declaro ter recebido a quantia de R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                           placeholder="" [(ngModel)]="comprov.totalPago"
+                           [ngModelOptions]="{standalone: true}" />
+                </span>
+                <br />
+                <span>Observacao:</span>
+                <hr size="1" style="border: 1px dashed" />
+                <br />
+                <hr size="1" style="border: 1px dashed" />
+                <br />
+                <hr size="1" style="border: 1px dashed" />
+                <div style="height: 40px"></div>
+                <hr>
+                <span>Assinatura:</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

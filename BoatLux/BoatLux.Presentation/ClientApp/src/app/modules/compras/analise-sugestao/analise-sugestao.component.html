@@ -1,0 +1,426 @@
+<div class="page-layout simple fullwidth">
+    <!-- HEADER -->
+    <titulo-pagina titulo="Módulo Compras" subTitulo="Análise e Sugestão de Compras"></titulo-pagina>
+    <!-- / HEADER -->
+    <!-- CONTENT -->
+    <div class="content p-20">
+        <!-- STEPPER -->
+        <mat-horizontal-stepper #stepper class="mat-elevation-z4" [linear]="false">
+            <mat-step [stepControl]="step1">
+                <form fxLayout="column" [formGroup]="step1FormGroup" autocomplete="off">
+
+                    <ng-template matStepLabel>Busca de produtos</ng-template>
+
+                    <div fxLayout="column">
+                        <controles-combo-loja #comboLoja multiLoja="true" [formGroup]="step1FormGroup" (aoSelecionarLoja)="aoSelecionarLoja()"></controles-combo-loja>
+                        <controles-busca-rapida #fornecedor tipo="fornecedor"></controles-busca-rapida>
+                        <controles-busca-rapida #representante tipo="representante"></controles-busca-rapida>
+                        <div fxLayout="column">
+                            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+
+
+                                <mat-form-field fxFlex="50%">
+                                    <input matInput ngxDaterangepickerMd placeholder="Período de análise de vendas" [autoApply]="false" [alwaysShowCalendars]="true" [ranges]="ranges" formControlName="periodo" type="text" readonly>
+                                </mat-form-field>
+                                <mat-form-field fxFlex>
+                                    <mat-label>Margem de segurança</mat-label>
+                                    <input matInput formControlName="margemSeguranca" placeholder="Digite um valor entre 0,00 e 100,00" currencyMask [options]="{ prefix:'', suffix: '%', thousands: '.', decimal: ',', min: 0, max: 100, allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2 }">
+                                    <!--<mat-error>First Name is required!</mat-error>-->
+                                </mat-form-field>
+                                <mat-form-field fxFlex>
+                                    <mat-label>Dias operacionais para compra</mat-label>
+                                    <input matInput formControlName="diasOperacionais" placeholder="Digite um valor entre 0 e 999" currencyMask [options]="{ prefix:'', suffix: '', thousands: '.', decimal: ',', min: 0, max: 999, allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 0 }">
+                                    <!--<mat-error>First Name is required!</mat-error>-->
+                                </mat-form-field>
+
+                            </div>
+
+                            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+
+                                <mat-form-field fxFlex>
+                                    <mat-select placeholder="Promoção" formControlName="opcaoPromocao" [disabled]="naoAvaliaConsumo()">
+                                        <mat-option value="1">Todos</mat-option>
+                                        <mat-option value="2">Itens em promoção</mat-option>
+                                        <mat-option value="3">Itens não promoção</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field fxFlex>
+                                    <mat-select placeholder="Produtos para sugestão" formControlName="opcaoProdutosParaSugestao">
+                                        <mat-option value="1">Todos</mat-option>
+                                        <mat-option value="2">Itens que avaliam na cotação</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field fxFlex>
+                                    <mat-select placeholder="Vendas" formControlName="opcaoVendas" [disabled]="naoAvaliaConsumo()">
+                                        <mat-option value="1">PDV(CFe)</mat-option>
+                                        <mat-option value="2">PDV(CFe) + NFe</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <mat-accordion>
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Mais opções de filtros
+                                    </mat-panel-title>
+                                    <mat-panel-description>
+                                        Comprador, categorias, etc.
+                                    </mat-panel-description>
+                                </mat-expansion-panel-header>
+
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                                    <controles-busca-rapida #centroReceitaProduto tipo="centroReceitaProduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                    <controles-busca-rapida #grupoProduto tipo="grupoProduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                </div>
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                                    <controles-busca-rapida #categoriaProduto tipo="categoriaProduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                    <controles-busca-rapida #familiaProduto tipo="familiaProduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                </div>
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                                    <controles-busca-rapida #corredor tipo="corredor" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                                    <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                                        <mat-label>Descrição do produto</mat-label>
+                                        <input type="text" matInput formControlName="descricaoProd" maxlength="70" placeholder="Filtre pela descrição do produto">
+                                    </mat-form-field>
+                                </div>
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                                    <div fxFlex="50%" fxFlex.gt-sm="100%" [style.pointer-events]="pointerEvents" [style.opacity]="opacity">
+                                        <controles-busca-rapida #comprador tipo="comprador"></controles-busca-rapida>
+                                    </div>
+                                    <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                                        <mat-select placeholder="Exibição da quantidade sugerida" formControlName="opcaoQtdSugerida">
+                                            <mat-option value="1">Unidade</mat-option>
+                                            <mat-option value="2">Embalagem</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <br />
+                                <mat-card>
+                                    <mat-card-content>
+                                        <mat-checkbox class="example-margin" formControlName="somenteProdutosAtivos">Somente produtos ativos</mat-checkbox>
+                                        <br />
+                                        <mat-checkbox class="example-margin" formControlName="naoAvaliarConsumo">Não avaliar consumo</mat-checkbox>
+                                        <br />
+                                        <mat-checkbox class="example-margin" formControlName="verificarProdutosEstoqueZerado">Incluir produtos com estoque zerado</mat-checkbox>
+                                        <br />
+                                        <mat-checkbox class="example-margin" formControlName="verificarProdutosEstoqueInferiorOuIgualAoMaximo">Apenas produtos com estoque inferior ou igual ao mínimo do cadastro</mat-checkbox>
+                                        <br />
+                                        <mat-checkbox class="example-margin" formControlName="retirarProdutosPedidosCompra">Retirar produtos que estão em pedidos de compra</mat-checkbox>
+                                        <br />
+                                        <mat-checkbox class="example-margin" formControlName="incluirProdutosSazonais">Incluir produtos sazonais</mat-checkbox>
+                                    </mat-card-content>
+                                </mat-card>
+
+                            </mat-expansion-panel>
+                        </mat-accordion>
+
+                        <br />
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="center center">
+                        <button mat-raised-button type="button" color="accent" class="orange-bg mr-8" (click)="definirDadosPadraoStep1FormGroup()">
+                            <mat-icon>clear</mat-icon>
+                            <span fxShow.xs="false">Limpar</span>
+                        </button>
+                        <button mat-raised-button matStepperNext type="button" color="accent" (click)="carregarProdutosNoGrid()">
+                            <mat-icon>arrow_forward</mat-icon>
+                            Gerar produtos sugeridos
+                        </button>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step [stepControl]="step2">
+                <mat-card *ngIf="exibeProdutosCarregando" class="mt-20" style="display: flex; justify-content: center; align-items: center">
+                    <div>
+                        <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                        </mat-progress-spinner>
+                    </div>
+                    <div style="padding-left: 15px;">
+                        <h2>
+                            Aguarde enquanto montamos sua sugestão de compras...
+                        </h2>
+                    </div>
+                </mat-card>
+                <div *ngIf="!exibeProdutosCarregando && !temProdutos" class="alert alert-warning" role="alert">
+                    <mat-icon>warning</mat-icon>
+                    Não encontramos produtos para sua busca. Altere os filtros e tente novamente.
+                </div>
+                <div [hidden]="exibeProdutosCarregando || !temProdutos">
+                    <form [formGroup]="formControl" autocomplete="off" fxLayout="column">
+                        <ng-template matStepLabel>Produtos sugeridos</ng-template>
+                        <mat-card class="search-filter-card">
+                            <mat-card-content>
+                                <div fxLayout="row" fxLayoutGap="10px">
+                                    <mat-form-field fxFlex="60%">
+                                        <mat-label>Filtre os produtos desta análise</mat-label>
+                                        <input matInput type="text" placeholder="Filtre os produtos da análise pelo ID ou descrição" [(ngModel)]="filtroDescricaoProdutos" [ngModelOptions]="{standalone: true}" (keyup)="aplicarFiltroProdutos()">
+                                    </mat-form-field>
+                                    <mat-form-field fxFlex="40%">
+                                        <mat-select placeholder="Exibir" [(ngModel)]="filtroExibirQuantidade" [ngModelOptions]="{standalone: true}" (ngModelChange)="aplicarFiltroProdutos()">
+                                            <mat-option value="1">Todos os produtos</mat-option>
+                                            <mat-option value="2">Com quantidade a comprar</mat-option>
+                                            <mat-option value="3">Sem quantidade a comprar</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                            </mat-card-content>
+                            <mat-card-actions>
+                                <button mat-raised-button type="button" color="basic" class="left-action-button" [matMenuTriggerFor]="menuOperacoes" [disabled]="!itensSelecionados.hasValue()">
+                                    <mat-icon>playlist_add_check</mat-icon>
+                                    <span fxShow.xs="false">Operações</span>
+                                </button>
+                                <mat-menu #menuOperacoes="matMenu">
+                                    <button mat-menu-item (click)="desativarProdVenda()">Desativar prod. p/ venda</button>
+                                    <button mat-menu-item (click)="recategorizar()">Recategorizar produtos</button>
+                                    <button mat-menu-item (click)="desassociarFornecedor()" [disabled]="!temFornecedor">Desassociar prod. do fornecedor</button>
+                                </mat-menu>
+                                <mat-icon *ngIf="possuiPendenciaFornec" matTooltip="Fornecedor possui pendência. Para visualizá-la, acesse Opções > Pendências do Fornecedor." matTooltipClass="blue-500-bg" class="left-action-button blue-200">
+                                    bookmarks
+                                </mat-icon>
+                                <mat-icon matTooltip="{{tooltipFiltros}}" matTooltipClass="blue-500-bg" class="left-action-button blue-200">
+                                    info
+                                </mat-icon>
+                                <button mat-raised-button type="button" color="accent" class="grey-800-bg mr-8" [matMenuTriggerFor]="menuOpcoesGridProdutos">
+                                    <mat-icon>settings</mat-icon>
+                                    Opções
+                                </button>
+                                <mat-menu #menuOpcoesGridProdutos="matMenu">
+                                    <button mat-menu-item (click)="abrirJanelaEscolhaDeColunas()">
+                                        <mat-icon>view_column</mat-icon>
+                                        Configurar colunas...
+                                    </button>
+                                    <button *ngIf="!expandeTodosOsProdutos" mat-menu-item (click)="expandeTodosOsProdutos = true">
+                                        <mat-icon>visibility</mat-icon>
+                                        Expandir todos os produtos
+                                    </button>
+                                    <button *ngIf="expandeTodosOsProdutos" mat-menu-item (click)="expandeTodosOsProdutos = false; tempIdProdutoExpandido = '';">
+                                        <mat-icon>visibility_off</mat-icon>
+                                        Ocultar todos os produtos
+                                    </button>
+                                    <button mat-menu-item (click)="abrirPendenciasDoFornecedor()" [disabled]="!temFornecedor">
+                                        <mat-icon>bookmarks</mat-icon>
+                                        Pendências do fornecedor
+                                    </button>
+                                </mat-menu>
+                                <button mat-raised-button type="button" color="accent" class="cyan-bg mr-8" [matMenuTriggerFor]="menuImpressao">
+                                    <mat-icon>print</mat-icon>
+                                    Imprimir
+                                </button>
+                                <button mat-raised-button color="accent" class="blue-bg" (click)="adicionarProduto()">
+                                    <mat-icon>playlist_add</mat-icon>
+                                    Adicionar produto
+                                </button>
+                            </mat-card-actions>
+                        </mat-card>
+                        <div class="table-scroller ">
+                            <table mat-table class="table table-medium table-striped table-hover table-pointer" [dataSource]="produtosDataSource" matSort multiTemplateDataRows>
+                                <ng-container matColumnDef="select">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                      [checked]="itensSelecionados.hasValue() && isAllSelected()"
+                                                      [indeterminate]="itensSelecionados.hasValue() && !isAllSelected()">
+                                        </mat-checkbox>
+                                    </th>
+                                    <td mat-cell *matCellDef="let item">
+                                        <mat-checkbox (click)="$event.stopPropagation()"
+                                                      (change)="$event ? itensSelecionados.toggle(item) : null"
+                                                      [checked]="itensSelecionados.isSelected(item)">
+                                        </mat-checkbox>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef></td>
+                                </ng-container>
+                                <ng-container matColumnDef="prodId">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                                    <td mat-cell *matCellDef="let item">{{item.prodId}}</td>
+                                    <td mat-footer-cell *matFooterCellDef colspan="3">Totalização geral</td>
+                                </ng-container>
+                                <ng-container matColumnDef="barra">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Barra</th>
+                                    <td mat-cell *matCellDef="let item">{{item.barra}}</td>
+                                    <td mat-footer-cell *matFooterCellDef [hidden]="true"></td>
+                                </ng-container>
+                                <ng-container matColumnDef="descricao">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+                                    <td mat-cell *matCellDef="let item">{{item.descricao}}</td>
+                                    <td mat-footer-cell *matFooterCellDef [hidden]="true"></td>
+                                </ng-container>
+                                <ng-container matColumnDef="estoqueAtualTotal">
+                                    <th mat-header-cell *matHeaderCellDef>Estoque Total</th>
+                                    <td mat-cell *matCellDef="let item">{{calcularEstoqueAtualTotal(item)}}</td>
+                                    <td mat-footer-cell *matFooterCellDef>{{ calcularEstoqueAtualTotalGeral() }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="qtdTotalComprar">
+                                    <th mat-header-cell *matHeaderCellDef matTooltip="Qtd. Total a Comprar">Qtd. Total</th>
+                                    <td mat-cell *matCellDef="let item">{{calcularQtdTotalComprar(item)}}</td>
+                                    <td mat-footer-cell *matFooterCellDef>{{ calcularQtdTotalComprarGeral() }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="valorTotalComprar">
+                                    <th mat-header-cell *matHeaderCellDef matTooltip="Valor Total a Comprar">R$ Total</th>
+                                    <td mat-cell *matCellDef="let item">{{ calcularValorTotalComprar(item) }}</td>
+                                    <td mat-footer-cell *matFooterCellDef>{{calcularValorTotalComprarGeral()}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="sazonal">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header [hidden]="!exibeColunaSazonal">Sazonal</th>
+                                    <td mat-cell *matCellDef="let item" [hidden]="!exibeColunaSazonal">{{verificarSazonal(item)}}</td>
+                                    <td mat-footer-cell *matFooterCellDef [hidden]="true"></td>
+                                </ng-container>
+                                <ng-container matColumnDef="acoes">
+                                    <th mat-header-cell *matHeaderCellDef style="text-align: right   !important;">Ações</th>
+                                    <td mat-cell *matCellDef="let item;" style="text-align: right;">
+                                        <button mat-icon-button aria-label="Histórico" class="green-fg" (click)="abrirJanelaDetalhesProduto(item)" matTooltip="Informações do produto">
+                                            <mat-icon>info</mat-icon>
+                                        </button>
+                                        <button mat-icon-button aria-label="Associar fornecedor" class="grey-bg" (click)="abrirJanelaAssociarFornecedor(item)" matTooltip="Associar produto a fornecedor">
+                                            <mat-icon>insert_link</mat-icon>
+                                        </button>
+                                        <button mat-icon-button aria-label="Excluir" class="red-fg" (click)="removerProduto(item)" matTooltip="Excluir">
+                                            <mat-icon>close</mat-icon>
+                                        </button>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef></td>
+                                </ng-container>
+                                <ng-container matColumnDef="tabelaFilho">
+                                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="colunasProdutosCapa.length">Ações</th>
+                                    <td mat-cell *matCellDef="let item;" [attr.colspan]="colunasProdutosCapa.length">
+                                        <div class="nestedMatTableWrapper">
+                                            <table class="table table-small table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th *ngFor="let coluna of colunasProdutosLojas" [hidden]="!coluna.visivel">{{coluna.nome}}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let subItem of item.lojas" [ngClass]="{'green-50-bg': subItem.alterado }">
+                                                        <td [hidden]="!colunasProdutosLojas[0].visivel" align="center">{{subItem.lojaId}}</td>
+                                                        <td [hidden]="!colunasProdutosLojas[1].visivel">{{subItem.estoque}}</td>
+                                                        <td [hidden]="!colunasProdutosLojas[2].visivel">{{subItem.consumo}}</td>
+                                                        <td [hidden]="!colunasProdutosLojas[3].visivel">
+                                                            <input matInput maxlength="10" currencyMask [options]="{ prefix: '', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 3, inputMode: 1 }" placeholder="" [(ngModel)]="subItem.qtdComprar" (ngModelChange)="item.alterado = true; subItem.alterado = true;" [ngModelOptions]="{standalone: true}" style="color: blue; font-weight: bold;">
+                                                        </td>
+                                                        <td [hidden]="!colunasProdutosLojas[4].visivel">
+                                                            <input matInput maxlength="10" currencyMask [options]="{ prefix: '', thousands: '.', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 0, inputMode: 1 }" placeholder="" [(ngModel)]="subItem.qtdEmbalagem" (ngModelChange)="item.alterado = true; subItem.alterado = true; subItem.valorEmbalagem = (subItem.valorUnitario * subItem.qtdEmbalagem);" [ngModelOptions]="{standalone: true}" style="color: blue; font-weight: bold;" />
+                                                        </td>
+                                                        <td [hidden]="!colunasProdutosLojas[5].visivel">{{subItem.qtdAberto}}</td>
+                                                        <td [hidden]="!colunasProdutosLojas[6].visivel">{{subItem.trocas}}</td>
+                                                        <td [hidden]="!colunasProdutosLojas[7].visivel">
+                                                            <input matInput maxlength="17" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 4, inputMode: 1 }" placeholder="" [(ngModel)]="subItem.valorUnitario" (ngModelChange)="item.alterado = true; subItem.alterado = true; subItem.valorEmbalagem = (subItem.valorUnitario * subItem.qtdEmbalagem);" [ngModelOptions]="{standalone: true}" style="color: blue; font-weight: bold;" />
+                                                        </td>
+                                                        <td [hidden]="!colunasProdutosLojas[8].visivel">{{subItem.cmvAtual}}</td>
+                                                        <td [hidden]="!colunasProdutosLojas[9].visivel">{{subItem.precoEntrada}}</td>
+                                                        <td [hidden]="!colunasProdutosLojas[10].visivel">
+                                                            <input matInput
+                                                                   maxlength="12"
+                                                                   currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                                                                   placeholder=""
+                                                                   [(ngModel)]="subItem.valorVenda"
+                                                                   (ngModelChange)="item.alterado = true; subItem.alterado = true; subItem.percMargemBruta = 100 - (subItem.cmvAtual / subItem.valorVenda) * 100;"
+                                                                   [ngModelOptions]="{standalone: true}"
+                                                                   [ngStyle]="gerarReajustePreco(subItem) && {'color': 'blue', 'font-weight': 'bold'}"
+                                                                   [readonly]="!gerarReajustePreco(subItem)" />
+                                                        </td>
+                                                        <td [hidden]="!colunasProdutosLojas[11].visivel">{{subItem.minGondola}}</td>
+                                                        <td [hidden]="!colunasProdutosLojas[12].visivel">{{subItem.maxGondola}}</td>
+                                                        <td [hidden]="!colunasProdutosLojas[13].visivel">{{subItem.minDeposito}}</td>
+                                                        <td [hidden]="!colunasProdutosLojas[14].visivel">{{subItem.maxDeposito}}</td>
+                                                        <td [hidden]="!colunasProdutosLojas[15].visivel">
+                                                            <input matInput maxlength="6" currencyMask [options]="{ prefix: '', suffix: '%', thousands: '.', decimal: ',', min: 0, max: 100, allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 3, inputMode: 1 }" placeholder="" [(ngModel)]="subItem.percDesconto" (ngModelChange)="item.alterado = true; subItem.alterado = true; subItem.percAcrescimo = 0;" [ngModelOptions]="{standalone: true}" style="color: blue; font-weight: bold;" />
+                                                        </td>
+                                                        <td [hidden]="!colunasProdutosLojas[16].visivel">
+                                                            <input matInput maxlength="6" currencyMask [options]="{ prefix: '', suffix: '%', thousands: '.', decimal: ',', min: 0, max: 999, allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 3, inputMode: 1 }" placeholder="" [(ngModel)]="subItem.percAcrescimo" (ngModelChange)="item.alterado = true; subItem.alterado = true; subItem.percDesconto = 0;" [ngModelOptions]="{standalone: true}" style="color: blue; font-weight: bold;" />
+                                                        </td>
+                                                        <td [hidden]="!colunasProdutosLojas[17].visivel">
+                                                            <input matInput maxlength="15" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }" placeholder="" [(ngModel)]="subItem.valorEmbalagem" (ngModelChange)="item.alterado = true; subItem.alterado = true; subItem.valorUnitario = calcularValorUnitario(item);" [ngModelOptions]="{standalone: true}" style="color: blue; font-weight: bold;" />
+                                                        </td>
+                                                        <td [hidden]="!colunasProdutosLojas[18].visivel">
+                                                            <input matInput currencyMask [options]="{ prefix: '', suffix: '%', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                                                                   placeholder=""
+                                                                   [(ngModel)]="subItem.percMargemBruta"
+                                                                   [ngModelOptions]="{standalone: true}"
+                                                                   readonly />
+                                                        </td>
+                                                        <td [hidden]="!colunasProdutosLojas[19].visivel">
+                                                            <input matInput currencyMask [options]="{ prefix: '', suffix: '%', thousands: '.', decimal: ',', allowNegative: false, allowZero: true, nullable: false, align: 'left', precision: 2, inputMode: 1 }"
+                                                                   placeholder=""
+                                                                   [(ngModel)]="subItem.percMargemParam"
+                                                                   [ngModelOptions]="{standalone: true}"
+                                                                   readonly />
+                                                        </td>
+                                                        <td [hidden]="!colunasProdutosLojas[20].visivel">{{subItem.ultimaEntrada | date:'dd/MM/yyyy'}}</td>
+                                                        <td [hidden]="!colunasProdutosLojas[21].visivel">{{subItem.ultimaSaida | date:'dd/MM/yyyy'}}</td>
+                                                        <td [hidden]="!colunasProdutosLojas[22].visivel">{{subItem.ultimaCompra | date:'dd/MM/yyyy'}}</td>
+                                                        <td [hidden]="!colunasProdutosLojas[23].visivel">{{calcularValorTotalLoja(subItem)}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="colunasProdutosCapa.length"></td>
+                                </ng-container>
+
+                                <tr mat-header-row style="white-space: nowrap;" *matHeaderRowDef="colunasProdutosCapa;"></tr>
+                                <tr mat-row style="white-space: nowrap;" *matRowDef="let row; columns: colunasProdutosCapa" [ngClass]="{'green-50-bg': row.alterado }" (click)="expandirProduto(row)"></tr>
+                                <tr mat-row *matRowDef="let row; columns: ['tabelaFilho']" [hidden]="row.tempId != tempIdProdutoExpandido && !expandeTodosOsProdutos" style="background-color: #f8f8f8 !important; cursor: default !important;"></tr>
+                                <tr mat-footer-row *matFooterRowDef="colunasProdutosCapa"></tr>
+                            </table>
+                        </div>
+                        <mat-paginator [pageSizeOptions]="[10, 50]" showFirstLastButtons></mat-paginator>
+                        <br />
+                        <div fxLayout="row" fxLayoutAlign="center center">
+                            <button mat-raised-button matStepperPrevious type="button" color="accent" class="grey-bg mr-8">
+                                <mat-icon>arrow_back</mat-icon>
+                                Voltar
+                            </button>
+                            <button mat-raised-button matStepperNext type="button" color="accent">
+                                <mat-icon>arrow_forward</mat-icon>
+                                Ir para o próximo passo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </mat-step>
+            <mat-step [stepControl]="step3">
+                <form fxLayout="column" [formGroup]="step3FormGroup" autocomplete="off">
+                    <ng-template matStepLabel>Conclusão da análise</ng-template>
+                    <div *ngIf="!exibeProdutosCarregando && !temProdutos" class="alert alert-warning" role="alert">
+                        <mat-icon>warning</mat-icon>
+                        Não existe nenhuma sugestão de produto, volte ao primeiro passo e altere os filtros de pesquisa.
+                    </div>
+                    <div *ngIf="!exibeProdutosCarregando && temProdutos">
+                        <div fxLayout="row" fxLayoutAlign="center center">
+                            <button mat-raised-button matStepperPrevious type="button" color="accent" class="grey-bg mr-8">
+                                <mat-icon>arrow_back</mat-icon>
+                                Voltar
+                            </button>
+                            <button mat-raised-button type="button" color="accent" class="cyan-bg mr-8" [matMenuTriggerFor]="menuImpressao">
+                                <mat-icon>print</mat-icon>
+                                Imprimir
+                            </button>
+                            <button mat-raised-button type="button" color="accent" class="green-bg mr-8" (click)="abrirJanelaGeraPedido()">
+                                <mat-icon>save</mat-icon>
+                                Gerar pedido
+                            </button>
+                            <button mat-raised-button type="button" color="accent" class="blue-bg mr-8" (click)="gerarCotacaoCompra()">
+                                <mat-icon>save</mat-icon>
+                                Gerar cotação
+                            </button>
+                            <button mat-raised-button type="button" color="accent" class="grey-800-bg mr-8" (click)="gerarEstoqueMinimo()">
+                                <mat-icon>save</mat-icon>
+                                Gerar estoque mínimo
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </mat-step>
+        </mat-horizontal-stepper>
+        <!-- / STEPPER -->
+
+        <mat-menu #menuImpressao="matMenu">
+            <button mat-menu-item (click)="imprimirRelatorio(1, true)">Visualizar</button>
+            <button mat-menu-item (click)="imprimirRelatorio(1, false)">Exportar PDF</button>
+            <button mat-menu-item (click)="imprimirRelatorio(2, false)">Exportar XLS</button>
+        </mat-menu>
+    </div>
+    <!-- / CONTENT -->
+</div>

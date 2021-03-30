@@ -1,0 +1,81 @@
+<form autocomplete="off" [formGroup]="filtroRelPedidoFormGroup">
+    <h1 mat-dialog-title>
+        Filtros para impressão - Rel. de Pedidos de Compra
+        <button type="button" mat-icon-button (click)="dialogRef.close()" style="float:right;">
+            <mat-icon>close</mat-icon>
+        </button>
+    </h1>
+    <mat-dialog-content>
+        <mat-card>
+            <mat-card-content>
+                <div fxLayout="column">
+                    <controles-combo-loja #comboLoja multiLoja="true" (aoSelecionarLoja)="aoSelecionarLoja()"></controles-combo-loja>
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <mat-form-field fxFlex="50%">
+                        <mat-label>Pedido inicial</mat-label>
+                        <input type="number" matInput formControlName="pedidoIni" maxlength="10" min="1"
+                            oninput="validity.valid||(value='');" placeholder="Pedido inicial">
+                    </mat-form-field>
+                    <mat-form-field fxFlex="50%">
+                        <mat-label>Pedido final</mat-label>
+                        <input type="number" matInput formControlName="pedidoFim" maxlength="10" min="1"
+                            oninput="validity.valid||(value='');" placeholder="Pedido final">
+                    </mat-form-field>
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <controles-busca-rapida #comprador tipo="comprador" fxFlex="50%" fxFlex.gt-sm="100%">
+                    </controles-busca-rapida>
+                    <controles-busca-rapida #fornecedor tipo="fornecedor" fxFlex="50%" fxFlex.gt-sm="100%">
+                    </controles-busca-rapida>
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <mat-form-field fxFlex>
+                        <mat-label>Período do pedido</mat-label>
+                        <input matInput ngxDaterangepickerMd placeholder="Período do pedido"
+                            formControlName="periodoPedido" [autoApply]="false" [showClearButton]="true"
+                            [alwaysShowCalendars]="true" [ranges]="ranges" type="text" readonly>
+                    </mat-form-field>
+                    <mat-form-field fxFlex>
+                        <mat-label>Período de validade do pedido</mat-label>
+                        <input matInput ngxDaterangepickerMd placeholder="Período de validade do pedido"
+                            formControlName="periodoValidadePedido" [autoApply]="false" [showClearButton]="true"
+                            [alwaysShowCalendars]="true" [ranges]="ranges" type="text" readonly>
+                    </mat-form-field>
+                </div>
+                <div fxLayout="column">
+                    <mat-checkbox fxLayout="row" formControlName="quebraLojaPorRelatorio">Imprimir pedidos por página
+                    </mat-checkbox>
+                    <mat-checkbox fxLayout="row" formControlName="mostrarUltPrecoUnit">Imprimir preço unitário de compra
+                    </mat-checkbox>
+                    <mat-checkbox fxLayout="row" formControlName="mostrarPrecoCusto">Imprimir preço de custo atual do
+                        cadastro</mat-checkbox>
+                    <mat-checkbox fxLayout="row" formControlName="imprimirRecebimentoCego"
+                        (change)="imprimirRecebimentoChecked($event.checked)">Imprimir o Pedido no Modelo de Recebimento
+                        Cego</mat-checkbox>
+                    <mat-checkbox fxLayout="row" formControlName="imprimirTrocas" disabled
+                        matTooltip="Em desenvolvimento">Imprimir relatório de trocas por fornecedor</mat-checkbox>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </mat-dialog-content>
+    <mat-card-actions fxLayoutAlign="end">
+        <button type="button" mat-raised-button color="accent" class="grey-500-bg" (click)="dialogRef.close()">
+            <mat-icon>close</mat-icon>
+            Fechar
+        </button>
+        <button type="button" mat-raised-button color="accent" class="orange-bg" (click)="definirDadosPadrao()">
+            <mat-icon>clear</mat-icon>
+            Limpar
+        </button>
+        <button mat-raised-button type="button" color="accent" class="cyan-bg" [matMenuTriggerFor]="menuImpressao">
+            <mat-icon>print</mat-icon>
+            <span fxShow.xs="false">Imprimir</span>
+        </button>
+        <mat-menu #menuImpressao="matMenu">
+            <button mat-menu-item (click)="imprimirBusca(1, true)">Visualizar</button>
+            <button mat-menu-item (click)="imprimirBusca(1, false)">Exportar PDF</button>
+            <button mat-menu-item (click)="imprimirBusca(2, false)">Exportar XLS</button>
+        </mat-menu>
+    </mat-card-actions>
+</form>

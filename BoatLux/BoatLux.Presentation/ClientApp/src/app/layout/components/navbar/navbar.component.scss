@@ -1,0 +1,22 @@
+.nav {
+
+    .nav-item {
+        .nav-link {
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.2);
+            }
+        }
+    }
+
+    &.material2, .material2 & {
+        .nav-item {
+
+            .nav-link {
+                //Altera a altura e o arredondamento do item do menu
+                font-size: 14px;
+                height: 32px;
+                border-radius: 0 16px 16px 0;
+            }
+        }
+    }
+}

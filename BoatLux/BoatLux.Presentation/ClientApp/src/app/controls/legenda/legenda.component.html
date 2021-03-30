@@ -1,0 +1,27 @@
+<style>
+    .quadro-legendas {
+        display: inline-block;
+        margin: 5px 0px;
+        font-style: normal;
+        width: 100%;        
+    }
+</style>
+<div class="quadro-legendas">
+    <div style="float: left;" *ngFor="let item of itens" fxShow.xs="false">
+        <div class="{{item.cor}}-bg" style="border-radius: 7px; float:left; width: 14px; height: 14px; max-height: 16px;"></div>
+        <div style="display: table-cell; line-height: 18px; font-size: 9pt; color: #444; padding-left: 5px; padding-right: 10px;">{{item.titulo}}</div>
+    </div>
+    <div *ngFor="let item of itens" fxShow.xs="true" fxShow="false">
+        <div class="{{item.cor}}-bg" style="border-radius: 7px; float:left; width: 14px; height: 14px; max-height: 16px;"></div>
+        <div style="display: table-cell; line-height: 18px; font-size: 9pt; color: #444; padding-left: 5px; padding-right: 10px;">{{item.titulo}}</div>
+    </div>
+    <div style="float: right; font-size: 9pt; background-color: #f1f1f1; border-radius: 11px; height: 22px; line-height: 22px; padding: 0px 6px; color: #444; font-weight: 600;" fxShow.xs="false" *ngIf="quantidadeResultados != undefined && quantidadeResultados != null && quantidadeResultados > 1">
+        {{quantidadeResultados}} resultado(s)
+    </div>
+    <div style="float: right; font-size: 9pt; background-color: #f1f1f1; border-radius: 11px; height: 22px; line-height: 22px; padding: 0px 6px; color: #444; font-weight: 600;" fxShow.xs="false" *ngIf="quantidadeResultados != undefined && quantidadeResultados != null && quantidadeResultados == 1">
+        1 resultado
+    </div>
+    <div style="float: right; font-size: 9pt; background-color: #f1f1f1; border-radius: 11px; height: 22px; line-height: 22px; padding: 0px 6px; color: #444; font-weight: 600;" fxShow.xs="false" *ngIf="quantidadeResultados == 0 || quantidadeResultados == undefined || quantidadeResultados == null">
+        Nenhum resultado
+    </div>
+</div>

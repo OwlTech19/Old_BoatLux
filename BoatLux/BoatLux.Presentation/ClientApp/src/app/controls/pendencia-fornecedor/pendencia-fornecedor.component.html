@@ -1,0 +1,94 @@
+<form [formGroup]="buscaFormGroup" autocomplete="off" (submit)="buscarPendencias()">
+    <h1 mat-dialog-title>
+        Pendências do fornecedor - {{razao}}
+        <button type="button" mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+    </h1>
+    <mat-dialog-content>
+        <mat-card class="search-filter-card">
+            <mat-card-content>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                        <input matInput ngxDaterangepickerMd placeholder="Período" [autoApply]="false" [showClearButton]="true" [alwaysShowCalendars]="true" [ranges]="ranges" formControlName="periodo" type="text" readonly>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="50%" fxFlex.gt-sm="100%">
+                        <mat-select placeholder="Situação" formControlName="situacao">
+                            <mat-option value="AB">Abertas</mat-option>
+                            <mat-option value="CA">Canceladas</mat-option>
+                            <mat-option value="F">Finalizadas</mat-option>
+                            <mat-option value="">Todas</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
+                <button type="button" mat-raised-button color="accent" class="green-bg" (click)="novaPendencia()">
+                    <mat-icon>add</mat-icon>
+                    Cadastrar pendência
+                </button>
+                <button type="submit" mat-raised-button color="accent" class="blue-bg">
+                    <mat-icon>search</mat-icon>
+                    Buscar
+                </button>
+            </mat-card-actions>
+        </mat-card>
+        <mat-card *ngIf="estaCarregandoItens && !temItens" class="mt-20" style="display: flex; justify-content: center; align-items: center">
+            <div>
+                <mat-progress-spinner color="primary" mode="indeterminate" diameter="50">
+                </mat-progress-spinner>
+            </div>
+            <div style="padding-left: 15px;">
+                <h2>
+                    Buscando pendências...
+                </h2>
+            </div>
+        </mat-card>
+        <div *ngIf="!estaCarregandoItens && !temItens" class="alert alert-warning" role="alert">
+            <mat-icon>warning</mat-icon>
+            Nenhuma pendência encontrada.
+        </div>
+        <div [hidden]="estaCarregandoItens && !temItens">
+                <table mat-table #table [dataSource]="itensDataSource" class="table table-medium table-hover" matSortActive="pendenciaId" matSort multiTemplateDataRows>
+                    <ng-container matColumnDef="pendenciaId">
+                        <th mat-header-cell *matHeaderCellDef>ID</th>
+                        <td mat-cell *matCellDef="let item">{{item.pendenciaId}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="data">
+                        <th mat-header-cell *matHeaderCellDef>Data</th>
+                        <td mat-cell *matCellDef="let item">{{item.data}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="descricao">
+                        <th mat-header-cell *matHeaderCellDef>Descrição</th>
+                        <td mat-cell *matCellDef="let item" matTooltip="{{item.descricao}}">{{obterDescricaoReduzida(item)}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="valor">
+                        <th mat-header-cell *matHeaderCellDef>Valor</th>
+                        <td mat-cell *matCellDef="let item">{{item.valor}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="descricaosituacao">
+                        <th mat-header-cell *matHeaderCellDef>Situação</th>
+                        <td mat-cell *matCellDef="let item">{{obterSituacaoTratada(item)}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="acoes">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let item;" style="text-align: right;">
+                            <button type="button" mat-icon-button aria-label="Editar pendência" class="light-green-500-fg" (click)="editarPendencia(item)" matTooltip="Editar pendência">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button aria-label="Excluir pendência" class="red-500-fg" (click)="excluirPendencia(item)" matTooltip="Excluir pendência">
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="colunasDef"></tr>
+                    <tr mat-row *matRowDef="let item; columns: colunasDef;" [class]="{'green-fg' : item.situacao == 'AB', 'red-fg' : item.situacao == 'CA'}"></tr>
+                </table>
+                <mat-paginator #itensPaginator [pageSizeOptions]="[10, 50]" showFirstLastButtons></mat-paginator>
+        </div>
+
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button type="button" mat-button (click)="dialogRef.close()" class="grey-300-bg">
+            Concluir
+        </button>
+    </mat-dialog-actions>
+</form>

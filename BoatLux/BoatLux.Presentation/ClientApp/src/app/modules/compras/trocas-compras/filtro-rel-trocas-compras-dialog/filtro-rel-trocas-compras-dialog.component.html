@@ -1,0 +1,86 @@
+<form autocomplete="off" [formGroup]="filtrosFormGroup">
+    <h1 mat-dialog-title>
+        Filtros para impressão - Rel. de Trocas de Compras
+        <button type="button" mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+    </h1>
+    <mat-dialog-content>
+        <mat-card>
+            <mat-card-content>
+                <div fxLayout="row" fxflex fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <controles-combo-loja #comboLoja multiLoja="true" fxFlex="50%"></controles-combo-loja>
+                    <controles-busca-rapida #fornecedor tipo="fornecedor" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <mat-form-field fxFlex="50%">
+                        <mat-label>Troca inicial</mat-label>
+                        <input type="number" matInput formControlName="trocaIni" maxlength="10" min="1" oninput="validity.valid||(value='');" placeholder="ID troca inicial">
+                    </mat-form-field>
+                    <mat-form-field fxFlex="50%">
+                        <mat-label>Troca final</mat-label>
+                        <input type="number" matInput formControlName="trocaFim" maxlength="10" min="1" oninput="validity.valid||(value='');" placeholder="ID troca final">
+                    </mat-form-field>
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                    <controles-busca-rapida #centroreceitaproduto tipo="centroreceitaproduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                    <controles-busca-rapida #grupoproduto tipo="grupoproduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                    <controles-busca-rapida #categoriaproduto tipo="categoriaproduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                    <controles-busca-rapida #familiaproduto tipo="familiaproduto" fxFlex="50%" fxFlex.gt-sm="100%"></controles-busca-rapida>
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <mat-form-field fxFlex="30">
+                        <mat-select placeholder="Filtrar data" formControlName="opcaoTipoData">
+                            <mat-option value="1">Data de lançamento</mat-option>
+                            <mat-option value="2">Data de baixa</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="70">
+                        <mat-label>Período das trocas</mat-label>
+                        <input matInput ngxDaterangepickerMd placeholder="Período das trocas" formControlName="periodoTroca"
+                               [autoApply]="false"
+                               [showClearButton]="true"
+                               [alwaysShowCalendars]="true"
+                               [ranges]="ranges"
+                               type="text" readonly>
+                    </mat-form-field>
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <mat-form-field fxFlex fxFlex.gt-sm="100%">
+                        <mat-select placeholder="Tipo de dados" formControlName="tipoRelatorio">
+                            <mat-option value="1">Analítico</mat-option>
+                            <mat-option value="2">Sintético</mat-option>
+                            <mat-option value="3">Resumido</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field fxFlex fxFlex.gt-sm="100%">
+                        <mat-select placeholder="Situação" formControlName="situacao">
+                            <mat-option value="1">Todos</mat-option>
+                            <mat-option value="2">Baixados</mat-option>
+                            <mat-option value="3">Abertos</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </mat-dialog-content>
+    <mat-card-actions fxLayoutAlign="end">
+        <button type="button" mat-raised-button color="accent" class="grey-500-bg" (click)="dialogRef.close()">
+            <mat-icon>close</mat-icon>
+            Fechar
+        </button>
+        <button type="button" mat-raised-button color="accent" class="orange-bg" (click)="definirDadosPadrao()">
+            <mat-icon>clear</mat-icon>
+            Limpar
+        </button>
+        <button mat-raised-button type="button" color="accent" class="cyan-bg" [matMenuTriggerFor]="menuImpressao">
+            <mat-icon>print</mat-icon>
+            <span fxShow.xs="false">Imprimir</span>
+        </button>
+        <mat-menu #menuImpressao="matMenu">
+            <button mat-menu-item (click)="imprimirBusca(1, true)">Visualizar</button>
+            <button mat-menu-item (click)="imprimirBusca(1, false)">Exportar PDF</button>
+            <button mat-menu-item (click)="imprimirBusca(2, false)">Exportar XLS</button>
+        </mat-menu>
+    </mat-card-actions>
+</form>

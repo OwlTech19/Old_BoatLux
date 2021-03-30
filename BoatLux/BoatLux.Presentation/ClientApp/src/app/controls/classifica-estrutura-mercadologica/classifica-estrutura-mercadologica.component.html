@@ -1,0 +1,26 @@
+<form autocomplete="off">
+    <h1 mat-dialog-title>
+        Classificar estrutura mercadológica dos produtos
+        <button type="button" mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+    </h1>
+    <mat-dialog-content>
+        <div fxflex>
+            <div fxLayout.lt-md="column">
+                <controles-busca-rapida #centroReceitaProduto tipo="centroReceitaProduto"></controles-busca-rapida>
+                <controles-busca-rapida #grupoProduto tipo="grupoProduto"></controles-busca-rapida>
+                <controles-busca-rapida #categoriaProduto tipo="categoriaProduto"></controles-busca-rapida>
+                <controles-busca-rapida #familiaProduto tipo="familiaProduto"></controles-busca-rapida>
+            </div>
+        </div>
+        <mat-card-actions fxLayoutAlign="end">
+            <button type="button" mat-raised-button class="grey-300-bg" (click)="dialogRef.close()">
+                <mat-icon>cancel</mat-icon>
+                Cancelar
+            </button>
+            <button type="button" mat-raised-button color="accent" class="green-bg" (click)="classificarProdutos()">
+                <mat-icon>check</mat-icon>
+                Classificar produtos
+            </button>
+        </mat-card-actions>
+    </mat-dialog-content>
+</form>

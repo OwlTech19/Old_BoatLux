@@ -1,0 +1,49 @@
+<form [formGroup]="dadosFormGroup" autocomplete="off">
+    <h1 mat-dialog-title>
+        Enviar e-mail
+        <button type="button" mat-icon-button (click)="dialogRef.close()" style="float:right;"><mat-icon>close</mat-icon></button>
+    </h1>
+
+    <div>
+        <mat-form-field class="example-chip-list">
+            <mat-chip-list #chipList aria-label="Emails selection">
+                <mat-chip *ngFor="let item of emails" [selectable]="selectable"
+                          [removable]="removable" (removed)="remove(item)">
+                    {{item.email}}
+                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <input placeholder="Para"
+                       type="email"
+                       [matChipInputFor]="chipList"
+                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                       [matChipInputAddOnBlur]="addOnBlur"
+                       (matChipInputTokenEnd)="add($event)">
+            </mat-chip-list>
+        </mat-form-field>
+        <mat-form-field fxLayout="column">
+            <mat-label>Assunto</mat-label>
+            <input matInput type="text" maxlength="200" formControlName="assunto" placeholder="Assunto">
+        </mat-form-field>
+
+        <div fxLayout="column">
+            <angular-editor formControlName="mensagem"
+                            [config]="editorConfig"></angular-editor>
+        </div>
+        <div fxLayout="column">
+            <mat-checkbox class="example-margin" formControlName="impPrecoUnitCompra">Imprimir preço unitário de compra</mat-checkbox>
+            <mat-checkbox class="example-margin" formControlName="impCustoAtualCadastro">Imprimir preço de custo atual do cadastro</mat-checkbox>
+        </div>
+
+    </div>
+    <div>
+        <mat-card-actions fxLayoutAlign="end" fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+            <button mat-raised-button type="button" class="grey-300-bg" (click)="dialogRef.close()">
+                <span fxShow.xs="false">Descartar</span>
+            </button>
+            <button mat-raised-button type="button" color="accent" class="green-bg" (click)="enviarEmail()">
+                <mat-icon>send</mat-icon>
+                <span fxShow.xs="false">Enviar</span>
+            </button>
+        </mat-card-actions>
+    </div>
+</form>
