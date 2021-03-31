@@ -1,0 +1,26 @@
+C:\Jeff\Projects\BoatLux\BoatLux\BoatLux.Application\bin\Debug\netcoreapp3.1\BoatLux.Application.deps.json
+C:\Jeff\Projects\BoatLux\BoatLux\BoatLux.Application\bin\Debug\netcoreapp3.1\BoatLux.Application.dll
+C:\Jeff\Projects\BoatLux\BoatLux\BoatLux.Application\bin\Debug\netcoreapp3.1\BoatLux.Application.pdb
+C:\Jeff\Projects\BoatLux\BoatLux\BoatLux.Application\obj\Debug\netcoreapp3.1\BoatLux.Application.csprojAssemblyReference.cache
+C:\Jeff\Projects\BoatLux\BoatLux\BoatLux.Application\obj\Debug\netcoreapp3.1\BoatLux.Application.AssemblyInfoInputs.cache
+C:\Jeff\Projects\BoatLux\BoatLux\BoatLux.Application\obj\Debug\netcoreapp3.1\BoatLux.Application.AssemblyInfo.cs
+C:\Jeff\Projects\BoatLux\BoatLux\BoatLux.Application\obj\Debug\netcoreapp3.1\BoatLux.Application.csproj.CoreCompileInputs.cache
+C:\Jeff\Projects\BoatLux\BoatLux\BoatLux.Application\obj\Debug\netcoreapp3.1\BoatLux.Application.dll
+C:\Jeff\Projects\BoatLux\BoatLux\BoatLux.Application\obj\Debug\netcoreapp3.1\BoatLux.Application.pdb
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\obj\Debug\netcoreapp3.1\BoatLux.Application.csprojAssemblyReference.cache
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\obj\Debug\netcoreapp3.1\BoatLux.Application.AssemblyInfoInputs.cache
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\obj\Debug\netcoreapp3.1\BoatLux.Application.AssemblyInfo.cs
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\obj\Debug\netcoreapp3.1\BoatLux.Application.csproj.CoreCompileInputs.cache
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\bin\Debug\netcoreapp3.1\BoatLux.Application.deps.json
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\bin\Debug\netcoreapp3.1\BoatLux.Application.dll
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\bin\Debug\netcoreapp3.1\BoatLux.Application.pdb
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\bin\Debug\netcoreapp3.1\BoatLux.Domain.dll
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\bin\Debug\netcoreapp3.1\BoatLux.Infra.dll
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\bin\Debug\netcoreapp3.1\BoatLux.Infra.pdb
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\bin\Debug\netcoreapp3.1\BoatLux.Domain.pdb
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\obj\Debug\netcoreapp3.1\BoatLux.Application.csproj.CopyComplete
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\obj\Debug\netcoreapp3.1\BoatLux.Application.dll
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\obj\Debug\netcoreapp3.1\BoatLux.Application.pdb
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\bin\Debug\netcoreapp3.1\BoatLux.Application.runtimeconfig.json
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\bin\Debug\netcoreapp3.1\BoatLux.Application.runtimeconfig.dev.json
+C:\Jeff\Projects\BoatLux\BoatLux\3 - BoatLux.Application\obj\Debug\netcoreapp3.1\BoatLux.Application.genruntimeconfig.cache

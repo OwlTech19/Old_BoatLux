@@ -1,0 +1,18 @@
+C:\Jeff\Projects\BoatLux\BoatLux\Boatlux.Domain\bin\Debug\netcoreapp3.1\Boatlux.Domain.deps.json
+C:\Jeff\Projects\BoatLux\BoatLux\Boatlux.Domain\bin\Debug\netcoreapp3.1\Boatlux.Domain.dll
+C:\Jeff\Projects\BoatLux\BoatLux\Boatlux.Domain\bin\Debug\netcoreapp3.1\Boatlux.Domain.pdb
+C:\Jeff\Projects\BoatLux\BoatLux\Boatlux.Domain\obj\Debug\netcoreapp3.1\Boatlux.Domain.csprojAssemblyReference.cache
+C:\Jeff\Projects\BoatLux\BoatLux\Boatlux.Domain\obj\Debug\netcoreapp3.1\Boatlux.Domain.AssemblyInfoInputs.cache
+C:\Jeff\Projects\BoatLux\BoatLux\Boatlux.Domain\obj\Debug\netcoreapp3.1\Boatlux.Domain.AssemblyInfo.cs
+C:\Jeff\Projects\BoatLux\BoatLux\Boatlux.Domain\obj\Debug\netcoreapp3.1\Boatlux.Domain.csproj.CoreCompileInputs.cache
+C:\Jeff\Projects\BoatLux\BoatLux\Boatlux.Domain\obj\Debug\netcoreapp3.1\Boatlux.Domain.dll
+C:\Jeff\Projects\BoatLux\BoatLux\Boatlux.Domain\obj\Debug\netcoreapp3.1\Boatlux.Domain.pdb
+C:\Jeff\Projects\BoatLux\BoatLux\4 - BoatLux.Domain\bin\Debug\netcoreapp3.1\BoatLux.Domain.deps.json
+C:\Jeff\Projects\BoatLux\BoatLux\4 - BoatLux.Domain\bin\Debug\netcoreapp3.1\BoatLux.Domain.dll
+C:\Jeff\Projects\BoatLux\BoatLux\4 - BoatLux.Domain\bin\Debug\netcoreapp3.1\BoatLux.Domain.pdb
+C:\Jeff\Projects\BoatLux\BoatLux\4 - BoatLux.Domain\obj\Debug\netcoreapp3.1\BoatLux.Domain.AssemblyInfoInputs.cache
+C:\Jeff\Projects\BoatLux\BoatLux\4 - BoatLux.Domain\obj\Debug\netcoreapp3.1\BoatLux.Domain.AssemblyInfo.cs
+C:\Jeff\Projects\BoatLux\BoatLux\4 - BoatLux.Domain\obj\Debug\netcoreapp3.1\BoatLux.Domain.csproj.CoreCompileInputs.cache
+C:\Jeff\Projects\BoatLux\BoatLux\4 - BoatLux.Domain\obj\Debug\netcoreapp3.1\BoatLux.Domain.dll
+C:\Jeff\Projects\BoatLux\BoatLux\4 - BoatLux.Domain\obj\Debug\netcoreapp3.1\BoatLux.Domain.pdb
+C:\Jeff\Projects\BoatLux\BoatLux\4 - BoatLux.Domain\obj\Debug\netcoreapp3.1\BoatLux.Domain.csprojAssemblyReference.cache
