@@ -167,7 +167,7 @@ export class InfoPrecosCotacoesComponent implements AfterViewInit {
 
         // Informações iniciais
         const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet([
-            { A: "Gerado pelo Sambanet - Getway" },
+            { A: "Gerado pela Boatlux - OwlTech" },
             { A: "Número da cotação:", B: this.step1FormGroup.value.numeroCotacao },
             { A: "Data da cotação:", B: this.step1FormGroup.value.dataCotacao.startDate.format('DD/MM/YYYY') },
             { A: empty, B: empty },
